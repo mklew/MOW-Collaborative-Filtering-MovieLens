@@ -16,6 +16,8 @@
 *.lof
 *.log
 *.lot
+*.fls
+*.pdf
 *.maf
 *.mtc
 *.mtc0

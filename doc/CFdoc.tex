@@ -1,0 +1,111 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage{polish} 
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\title{\textbf{Kolaboratywna filtracja na podstawie ocen filmów z bazy MovieLens}}
+\author{Marek Lewandowski \\ Michał Karpiuk}
+\date{}
+%\setlength{\parindent}{0in}
+
+\begin{document}
+\maketitle
+
+\section{Techniki rekomendacji}
+Kolaboratyna filtracja jest jedną z metod implementacji systemów rekomendacji. Inne dostępne metody to filtracja na podstawie zawartości\footnote{ang. content-based filtering} oraz techniki hybrydowe, które łączą ze sobą kolaboratywną filtrację z metodami filtrującymi zawartość. W tej pracy będziemy się posługiwać kolaboratyną filtracją.
+
+\section{Kolaboratyna filtracja}
+Algorymy kolaboratywnej filtracji można podzielić na:
+
+\begin{enumerate} 
+\item oparte na pamięci\footnote{ang. Memory-based algorithms} TODO czy tak napewno się to tłumaczy - w celu predykcji używają całego zbioru danych
+\item oparte na modelu\footnote{ang. Model-based algorithms} - w celu predykcji używają przygotowanego za wczasu modelu
+\end{enumerate}
+
+Algorytmy oparte na modelu powstały w odpowiedzi na problemy ze skalowaniem i dokładnością predykcji modeli pamięciowych.
+
+\section{Zadanie}
+Naszym celem jest analiza algorytmów kolaboratywnej filtracji opartych na modelu. Docelowo chcemy mieć dobrą odpowiedź na pytanie: ,,Jaki film powinienem obejrzeć?''. Jest to typowy problem ,,Najlepszych N rekomendacji''\footnote{ang. Top-N recommendations}. Konkretnie, dla użytkownika, który ocenił parę filmów chcemy otrzymać rekomendację zawierającą N filmów do obejrzenia. Aby najlepiej odpowiedzieć na to pytanie przeprowadzimy analizę algorytmów, wpływ parametrów na ich dokładność oraz porówamy je między sobą.
+
+\section{Algorytmy oparte na modelu}
+Skorzystamy z algorytmów, które operują na modelu w celu rekomendacji. Działanie takich systemów rekomendacji można podzielić na dwie części:
+
+\begin{enumerate}
+\item Budowa modelu - Model trzeba zbudować raz, a następnie można z niego korzystać podczas predykcji. Wraz z pojawianiem się nowych użytkowników, można korzystać z tego samego modelu. Naturalnie, aby zwiększać dokładność należy model przebudowywać. Niektóre z metod pozwalają na efektywną rozbudowę modelu.
+\item Predykcja na podstawie modelu - bazując na modelu oraz ocenach użytkownika możemy dokonać predykcji.
+\end{enumerate} 
+
+Można zatem rozpatrywać system rekomendacji w dwóch etapach. Przedmiotem analizy są wtedy różne metody budowy modelu oraz metody dokonujące predykcji.
+
+\subsection{Metody budowy modelu}
+Model może być budowany na podstawie podobieństwa przedmiotów między sobą. Liczone są wtedy podobieństwa każdego przedmiotu, z każdym innym przedmiotem. Metody które pozwalają liczyć podobieństwo to:
+\begin{itemize}
+\item manhattan distance TODO jak to przetłumaczyć? Odległość Manhattan?
+\item odległość Euklidesowa
+\item odległość Minkowskiego\footnote{Odległość Manhattan i odległość Euklidesowa to szczególne przypadki odległości Minkowskiego}
+\item cosinus między przedmiotami
+\item korelacja Pearsona
+\item cosinus z poprawką
+\end{itemize}
+
+Innym sposobem budowy modelu jest liczenie odchylenia w ocenach przedmiotów. Liczone są odchylenia w ocenie każdego przedmiotu względem każdego innego przedmiotu.
+
+\subsection{Sposoby predykcji}
+Istnieje wiele metod predykcji. Niektóre z nich to:
+
+\begin{itemize}
+\item Slope One - wykorzystuje odchylenia
+\item Suma ważona podobnych przedmiotów - wykorzystuje podobieństwo
+\item suma ważona podobnych przedmiotów oparta o regresje liniową - wykorzystuje podobieństwo
+\end{itemize}
+
+\section{Wybrane algorytmy}
+TODO co wybieramy?
+
+\section{Parametry algorytmów}
+W przypadku algorytmów korzystających z podobieństwa przedmiotów do wyliczenia predykcji zazwyczaj stosuje się k-NN\footnote{ang. k-nearest neighbors}. Jednym z parametrów wymagających strojenia jest liczba $k$, a zatem ile podobnych przedmiotów na wpływ na predykcje oceny.
+
+TODO więcej paramterów
+
+\section{Przygotowanie danych}
+TODO
+
+trzeba napisać że chcemy filtrować dane z ocenami takie które mają co najmniej np. 20 ocen bo te dane od MovieLens są bardzo rzadkie
+
+\section{Ocena algorytmów}
+
+\subsection{Podział zbioru danych}
+Zbiór danych zostanie podzielony na dwa rozłączone podzbiory. Zbiór danych do uczenia się\footnote{ang. learning set} oraz zbiór danych testowych\footnote{ang. test set}. Stosunek zbioru określać będzie parametr $x$, gdzie $x = 0.9$ oznacza, że $90\%$ zbioru danych to dane do uczenia się, a $10\%$ to dane testowe.
+
+\subsection{MAE}
+Współczynnik Mean Absolute Error jest popularnym współczynnikiem w ocenie dokładności algorytmów rekomendacji. Liczy średnią z absolutnej różnicy pomiędzy predykcją, a prawdziwą oceną.
+
+\begin{math}
+MAE = \frac{
+	\sum_{\substack{
+   \{i, j\}
+  }}
+  |P_{i,j} - r_{i,j}|
+}{n}
+\end{math}
+
+\subsection{RMSE}
+Root Mean Squarred Error (RMSE) jest również używamy do oceny algorytmów. Charakteryzuje się tym, że bardziej karze większe odchylenia od prawdziwych wartości ocen.
+
+\begin{math}
+RMSE = \sqrt{
+	\frac{1}{n} \sum_{ \substack{
+		\{i,j\}
+	} }
+	(P_{i,j} - r_{i,j})^2
+}
+\end{math}
+gdzie $n$ to całkowita liczba ocen wszystkich użytkowników. $P_{i,j}$ to predykcja oceny dla użytkownika $i$ przedmiotu $j$. $r_{i,j}$ to prawdziwa ocena.
+
+\nocite{*}
+\bibliographystyle{plplain}
+\bibliography{biblio}
+
+
+\end{document}
