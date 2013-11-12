@@ -1,9 +1,11 @@
 \documentclass[12pt, a4paper]{article}
-\usepackage{polish} 
+\usepackage{polski}
 \usepackage[utf8]{inputenc}
+\usepackage[polish]{babel} 
 \usepackage{geometry}
 \usepackage{hyperref}
 \usepackage{amsmath}
+\usepackage[numbers]{natbib}
 \title{\textbf{Kolaboratywna filtracja na podstawie ocen filmów z bazy MovieLens}}
 \author{Marek Lewandowski \\ Michał Karpiuk}
 \date{}
@@ -71,7 +73,9 @@ TODO więcej paramterów
 \section{Przygotowanie danych}
 TODO
 
-trzeba napisać że chcemy filtrować dane z ocenami takie które mają co najmniej np. 20 ocen bo te dane od MovieLens są bardzo rzadkie
+trzeba napisać że chcemy filtrować dane z ocenami takie które mają co najmniej np. 20
+ ocen bo te dane od MovieLens są
+ bardzo rzadkie
 
 \section{Ocena algorytmów}
 
@@ -104,8 +108,6 @@ RMSE = \sqrt{
 gdzie $n$ to całkowita liczba ocen wszystkich użytkowników. $P_{i,j}$ to predykcja oceny dla użytkownika $i$ przedmiotu $j$. $r_{i,j}$ to prawdziwa ocena.
 
 \nocite{*}
-\bibliographystyle{plplain}
-\bibliography{biblio}
-
-
+\bibliographystyle{plainnat}
+\bibliography{bibliography}
 \end{document}
