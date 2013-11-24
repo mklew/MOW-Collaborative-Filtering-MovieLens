@@ -15,75 +15,130 @@
 \maketitle
 
 \section{Techniki rekomendacji}
-Kolaboratyna filtracja jest jedną z metod implementacji systemów rekomendacji. Inne dostępne metody to filtracja na podstawie zawartości\footnote{ang. content-based filtering} oraz techniki hybrydowe, które łączą ze sobą kolaboratywną filtrację z metodami filtrującymi zawartość. W tej pracy będziemy się posługiwać kolaboratyną filtracją.
+Kolaboratyna filtracja jest jedną z metod implementacji systemów rekomendacji. Inne 
+dostępne metody to filtracja na podstawie zawartości\footnote{ang. content-based filtering} 
+oraz techniki hybrydowe, które łączą ze sobą kolaboratywną filtrację z metodami 
+filtrującymi zawartość. W tej pracy będziemy się posługiwać kolaboratyną filtracją.
 
 \section{Kolaboratyna filtracja}
 Algorymy kolaboratywnej filtracji można podzielić na:
 
 \begin{enumerate} 
-\item oparte na pamięci\footnote{ang. Memory-based algorithms} TODO czy tak napewno się to tłumaczy - w celu predykcji używają całego zbioru danych
-\item oparte na modelu\footnote{ang. Model-based algorithms} - w celu predykcji używają przygotowanego za wczasu modelu
+\item oparte na pamięci\footnote{ang. Memory-based algorithms} - w celu predykcji używają całego zbioru danych
+\item oparte na modelu\footnote{ang. Model-based algorithms} - w celu predykcji używają 
+przygotowanego za wczasu modelu
 \end{enumerate}
 
-Algorytmy oparte na modelu powstały w odpowiedzi na problemy ze skalowaniem i dokładnością predykcji modeli pamięciowych.
-
 \section{Zadanie}
-Naszym celem jest analiza algorytmów kolaboratywnej filtracji opartych na modelu. Docelowo chcemy mieć dobrą odpowiedź na pytanie: ,,Jaki film powinienem obejrzeć?''. Jest to typowy problem ,,Najlepszych N rekomendacji''\footnote{ang. Top-N recommendations}. Konkretnie, dla użytkownika, który ocenił parę filmów chcemy otrzymać rekomendację zawierającą N filmów do obejrzenia. Aby najlepiej odpowiedzieć na to pytanie przeprowadzimy analizę algorytmów, wpływ parametrów na ich dokładność oraz porówamy je między sobą.
+Naszym zadaniem jest analiza algorytmów kolaboratywnej filtracji. Konkretnie, chcemy 
+porównać algorytmy UBCF, IBCF i Popular. W tym celu użyjemy języka R, a 
+dokładnie pakietu ,,Recommenderlab', który zawiera algorytmy kolaboratywnej filtracji i 
+pozwala na ich ewaluację.
 
-\section{Algorytmy oparte na modelu}
-Skorzystamy z algorytmów, które operują na modelu w celu rekomendacji. Działanie takich systemów rekomendacji można podzielić na dwie części:
+% \section{Algorytmy oparte na modelu}
+% Skorzystamy z algorytmów, które operują na modelu w celu rekomendacji. Działanie takich 
+% systemów rekomendacji można podzielić na dwie części:
 
-\begin{enumerate}
-\item Budowa modelu - Model trzeba zbudować raz, a następnie można z niego korzystać podczas predykcji. Wraz z pojawianiem się nowych użytkowników, można korzystać z tego samego modelu. Naturalnie, aby zwiększać dokładność należy model przebudowywać. Niektóre z metod pozwalają na efektywną rozbudowę modelu.
-\item Predykcja na podstawie modelu - bazując na modelu oraz ocenach użytkownika możemy dokonać predykcji.
-\end{enumerate} 
+% \begin{enumerate}
+% \item Budowa modelu - Model trzeba zbudować raz, a następnie można z niego korzystać 
+% podczas predykcji. Wraz z pojawianiem się nowych użytkowników, można korzystać z tego 
+% samego modelu. Naturalnie, aby zwiększać dokładność należy model przebudowywać. Niektóre z 
+% metod pozwalają na efektywną rozbudowę modelu.
+% \item Predykcja na podstawie modelu - bazując na modelu oraz ocenach użytkownika możemy 
+% dokonać predykcji.
+% \end{enumerate} 
 
-Można zatem rozpatrywać system rekomendacji w dwóch etapach. Przedmiotem analizy są wtedy różne metody budowy modelu oraz metody dokonujące predykcji.
+% Można zatem rozpatrywać system rekomendacji w dwóch etapach. Przedmiotem analizy są wtedy 
+% różne metody budowy modelu oraz metody dokonujące predykcji.
 
-\subsection{Metody budowy modelu}
-Model może być budowany na podstawie podobieństwa przedmiotów między sobą. Liczone są wtedy podobieństwa każdego przedmiotu, z każdym innym przedmiotem. Metody które pozwalają liczyć podobieństwo to:
-\begin{itemize}
-\item manhattan distance TODO jak to przetłumaczyć? Odległość Manhattan?
-\item odległość Euklidesowa
-\item odległość Minkowskiego\footnote{Odległość Manhattan i odległość Euklidesowa to szczególne przypadki odległości Minkowskiego}
-\item cosinus między przedmiotami
-\item korelacja Pearsona
-\item cosinus z poprawką
-\end{itemize}
+% \subsection{Metody budowy modelu}
+% Model może być budowany na podstawie podobieństwa przedmiotów między sobą. Liczone są wtedy 
+% podobieństwa każdego przedmiotu, z każdym innym przedmiotem. Metody które pozwalają liczyć 
+% podobieństwo to:
+% \begin{itemize}
+% \item manhattan distance TODO jak to przetłumaczyć? Odległość Manhattan?
+% \item odległość Euklidesowa
+% \item odległość Minkowskiego\footnote{Odległość Manhattan i odległość Euklidesowa to 
+% szczególne przypadki odległości Minkowskiego}
+% \item cosinus między przedmiotami
+% \item korelacja Pearsona
+% \item cosinus z poprawką
+% \end{itemize}
 
-Innym sposobem budowy modelu jest liczenie odchylenia w ocenach przedmiotów. Liczone są odchylenia w ocenie każdego przedmiotu względem każdego innego przedmiotu.
+% Innym sposobem budowy modelu jest liczenie odchylenia w ocenach przedmiotów. Liczone są 
+% odchylenia w ocenie każdego przedmiotu względem każdego innego przedmiotu.
 
-\subsection{Sposoby predykcji}
-Istnieje wiele metod predykcji. Niektóre z nich to:
+% \subsection{Sposoby predykcji}
+% Istnieje wiele metod predykcji. Niektóre z nich to:
 
-\begin{itemize}
-\item Slope One - wykorzystuje odchylenia
-\item Suma ważona podobnych przedmiotów - wykorzystuje podobieństwo
-\item suma ważona podobnych przedmiotów oparta o regresje liniową - wykorzystuje podobieństwo
-\end{itemize}
+% \begin{itemize}
+% \item Slope One - wykorzystuje odchylenia
+% \item Suma ważona podobnych przedmiotów - wykorzystuje podobieństwo
+% \item suma ważona podobnych przedmiotów oparta o regresje liniową - wykorzystuje 
+% podobieństwo
+% \end{itemize}
 
 \section{Wybrane algorytmy}
-TODO co wybieramy?
+Z pakietu ,,Recommenderlab'' wybraliśmy:
 
-\section{Parametry algorytmów}
-W przypadku algorytmów korzystających z podobieństwa przedmiotów do wyliczenia predykcji zazwyczaj stosuje się k-NN\footnote{ang. k-nearest neighbors}. Jednym z parametrów wymagających strojenia jest liczba $k$, a zatem ile podobnych przedmiotów na wpływ na predykcje oceny.
+\begin{itemize}
+\item IBCF - Recommender based on item-based collaborative filtering (real data)
+\item POPULAR - Recommender based on item popularity (real data)
+\item UBCF - Recommender based on user-based collaborative filtering (real data)
+\end{itemize}
 
-TODO więcej paramterów
+\section{Plan eksperymentów}
 
-\section{Przygotowanie danych}
-TODO
+\subsection{Pytania badawcze}
+Chcemy znaleźć odpowiedzi na następujące pytania:
 
-trzeba napisać że chcemy filtrować dane z ocenami takie które mają co najmniej np. 20
- ocen bo te dane od MovieLens są
- bardzo rzadkie
+\begin{enumerate}
+\item Który algorytm generuje lepsze wyniki?
+\item Który algorytm generuje szybciej wyniki?
+\item Jak sposób mierzenia podobieństwa wpływa na wyniki algorytmu?
+\item Który z algorytmów ma lepszą skalowalność?
+\item Jaki wpływ na wyniki algorytmu ma liczba podobnych użytkowników, używana do predykcji oceny?
+\item Jaki wpływ na wyniki algorytmu ma liczba podobnych filmów, używana do predykcji oceny?
+\item TODO
+\end{enumerate}
 
-\section{Ocena algorytmów}
+\subsection{Dane}
+Skorzystamy ze zbioru co najmniej 100 tysięcy ocen\footnote{w przypadku wystarczającej mocy 
+obliczeniowej skorzystamy z większej ilości danych} filmów przez użytkowników zawierających 
+następujace informacje:
 
-\subsection{Podział zbioru danych}
-Zbiór danych zostanie podzielony na dwa rozłączone podzbiory. Zbiór danych do uczenia się\footnote{ang. learning set} oraz zbiór danych testowych\footnote{ang. test set}. Stosunek zbioru określać będzie parametr $x$, gdzie $x = 0.9$ oznacza, że $90\%$ zbioru danych to dane do uczenia się, a $10\%$ to dane testowe.
+\begin{itemize}
+\item user id - identyfikator użytkownika
+\item item id - identyfikator filmu
+\item rating - ocena w skali 1 do 5 gwiazdek
+\end{itemize}
 
-\subsection{MAE}
-Współczynnik Mean Absolute Error jest popularnym współczynnikiem w ocenie dokładności algorytmów rekomendacji. Liczy średnią z absolutnej różnicy pomiędzy predykcją, a prawdziwą oceną.
+Każdy z użytkowników ma co najmniej 20 ocen filmów. Nie przewidujemy potrzeby wcześniejszej obróbki danych.
+
+TODO, czy tutaj warto napisać o normalizacji ocen użytkowników? Może warto żeby to było jakieś pytanie badawcze czy normalizacja ocen użytkowników ma pozytywny wpływ na wyniki algorytmów CF?
+
+\subsection{Badane parametry algorytmów}
+
+TODO czy to k da się ustawić w tym pakiecie recommenderlab?
+
+
+W przypadku algorytmów korzystających z podobieństwa przedmiotów do wyliczenia predykcji 
+zazwyczaj stosuje się k-NN\footnote{ang. k-nearest neighbors}. Jednym z parametrów 
+wymagających strojenia jest liczba $k$, a zatem ile podobnych przedmiotów na wpływ na 
+predykcje oceny.
+
+\subsection{Ewaluacja}
+
+\subsubsection{Podział zbioru danych}
+Zbiór danych zostanie podzielony na dwa rozłączone podzbiory. Zbiór danych do uczenia się\
+footnote{ang. learning set} oraz zbiór danych testowych\footnote{ang. test set}. Stosunek 
+zbioru określać będzie parametr $x$, gdzie $x = 0.9$ oznacza, że $90\%$ zbioru danych to 
+dane do uczenia się, a $10\%$ to dane testowe.
+
+\subsubsection{MAE}
+Współczynnik Mean Absolute Error jest popularnym współczynnikiem w ocenie dokładności 
+algorytmów rekomendacji. Liczy średnią z absolutnej różnicy pomiędzy predykcją, a prawdziwą 
+oceną.
 
 \begin{math}
 MAE = \frac{
@@ -94,8 +149,9 @@ MAE = \frac{
 }{n}
 \end{math}
 
-\subsection{RMSE}
-Root Mean Squarred Error (RMSE) jest również używamy do oceny algorytmów. Charakteryzuje się tym, że bardziej karze większe odchylenia od prawdziwych wartości ocen.
+\subsubsection{RMSE}
+Root Mean Squarred Error (RMSE) jest również używamy do oceny algorytmów. Charakteryzuje 
+się tym, że bardziej karze większe odchylenia od prawdziwych wartości ocen.
 
 \begin{math}
 RMSE = \sqrt{
@@ -105,7 +161,17 @@ RMSE = \sqrt{
 	(P_{i,j} - r_{i,j})^2
 }
 \end{math}
-gdzie $n$ to całkowita liczba ocen wszystkich użytkowników. $P_{i,j}$ to predykcja oceny dla użytkownika $i$ przedmiotu $j$. $r_{i,j}$ to prawdziwa ocena.
+gdzie $n$ to całkowita liczba ocen wszystkich użytkowników. $P_{i,j}$ to predykcja oceny 
+dla użytkownika $i$ przedmiotu $j$. $r_{i,j}$ to prawdziwa ocena.
+
+\subsubsection{Accuracy}
+TODO
+\subsubsection{Precision}
+TODO
+\subsubsection{Recall}
+TODO
+\subsubsection{F-Measure}
+TODO
 
 \nocite{*}
 \bibliographystyle{plainnat}
