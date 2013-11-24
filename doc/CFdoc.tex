@@ -1,7 +1,8 @@
+
 \documentclass[12pt, a4paper]{article}
 \usepackage{polski}
 \usepackage[utf8]{inputenc}
-\usepackage[polish]{babel} 
+\usepackage[polish]{babel}
 \usepackage{geometry}
 \usepackage{hyperref}
 \usepackage{amsmath}
@@ -9,83 +10,52 @@
 \title{\textbf{Kolaboratywna filtracja na podstawie ocen filmów z bazy MovieLens}}
 \author{Marek Lewandowski \\ Michał Karpiuk}
 \date{}
-%\setlength{\parindent}{0in}
 
 \begin{document}
 \maketitle
 
 \section{Techniki rekomendacji}
-Kolaboratyna filtracja jest jedną z metod implementacji systemów rekomendacji. Inne 
-dostępne metody to filtracja na podstawie zawartości\footnote{ang. content-based filtering} 
-oraz techniki hybrydowe, które łączą ze sobą kolaboratywną filtrację z metodami 
-filtrującymi zawartość. W tej pracy będziemy się posługiwać kolaboratyną filtracją.
+Kolaboratywna filtracja jest jedną z metod implementacji systemów rekomendacji. Inne
+dostępne metody to filtracja na podstawie zawartości\footnote{ang. content-based filtering}
+oraz techniki hybrydowe, które łączą ze sobą kolaboratywną filtrację z metodami
+filtrującymi zawartość. W tej pracy będziemy się posługiwać kolaboratywną filtracją.
 
-\section{Kolaboratyna filtracja}
-Algorymy kolaboratywnej filtracji można podzielić na:
+\section{Kolaboratywna filtracja}
+Algortymy kolaboratywnej filtracji można podzielić na:
 
-\begin{enumerate} 
+\begin{enumerate}
 \item oparte na pamięci\footnote{ang. Memory-based algorithms} - w celu predykcji używają całego zbioru danych
-\item oparte na modelu\footnote{ang. Model-based algorithms} - w celu predykcji używają 
+\item oparte na modelu\footnote{ang. Model-based algorithms} - w celu predykcji używają
 przygotowanego za wczasu modelu
 \end{enumerate}
 
 \section{Zadanie}
-Naszym zadaniem jest analiza algorytmów kolaboratywnej filtracji. Konkretnie, chcemy 
-porównać algorytmy UBCF, IBCF i Popular. W tym celu użyjemy języka R, a 
-dokładnie pakietu ,,Recommenderlab', który zawiera algorytmy kolaboratywnej filtracji i 
-pozwala na ich ewaluację.
+Naszym zadaniem jest analiza algorytmów kolaboratywnej filtracji. Konkretnie, chcemy
+porównać algorytmy UBCF, IBCF i Popular. W tym celu użyjemy języka R, a
+dokładnie pakietu ,,Recommenderlab', który zawiera algorytmy kolaboratywnej filtracji i
+pozwala na ich ewaluację. 
 
-% \section{Algorytmy oparte na modelu}
-% Skorzystamy z algorytmów, które operują na modelu w celu rekomendacji. Działanie takich 
-% systemów rekomendacji można podzielić na dwie części:
-
-% \begin{enumerate}
-% \item Budowa modelu - Model trzeba zbudować raz, a następnie można z niego korzystać 
-% podczas predykcji. Wraz z pojawianiem się nowych użytkowników, można korzystać z tego 
-% samego modelu. Naturalnie, aby zwiększać dokładność należy model przebudowywać. Niektóre z 
-% metod pozwalają na efektywną rozbudowę modelu.
-% \item Predykcja na podstawie modelu - bazując na modelu oraz ocenach użytkownika możemy 
-% dokonać predykcji.
-% \end{enumerate} 
-
-% Można zatem rozpatrywać system rekomendacji w dwóch etapach. Przedmiotem analizy są wtedy 
-% różne metody budowy modelu oraz metody dokonujące predykcji.
-
-% \subsection{Metody budowy modelu}
-% Model może być budowany na podstawie podobieństwa przedmiotów między sobą. Liczone są wtedy 
-% podobieństwa każdego przedmiotu, z każdym innym przedmiotem. Metody które pozwalają liczyć 
-% podobieństwo to:
-% \begin{itemize}
-% \item manhattan distance TODO jak to przetłumaczyć? Odległość Manhattan?
-% \item odległość Euklidesowa
-% \item odległość Minkowskiego\footnote{Odległość Manhattan i odległość Euklidesowa to 
-% szczególne przypadki odległości Minkowskiego}
-% \item cosinus między przedmiotami
-% \item korelacja Pearsona
-% \item cosinus z poprawką
-% \end{itemize}
-
-% Innym sposobem budowy modelu jest liczenie odchylenia w ocenach przedmiotów. Liczone są 
-% odchylenia w ocenie każdego przedmiotu względem każdego innego przedmiotu.
-
-% \subsection{Sposoby predykcji}
-% Istnieje wiele metod predykcji. Niektóre z nich to:
-
-% \begin{itemize}
-% \item Slope One - wykorzystuje odchylenia
-% \item Suma ważona podobnych przedmiotów - wykorzystuje podobieństwo
-% \item suma ważona podobnych przedmiotów oparta o regresje liniową - wykorzystuje 
-% podobieństwo
-% \end{itemize}
+Będziemy pracować z danymi ze zbioru MovieLens. Używać będziemy danych, które zawierają oceny od 1 do 5 gwiazdek. Od systemów rekomendacji oczekujemy predykcji w podobnej postaci czyli liczonej w gwiazdkach.
 
 \section{Wybrane algorytmy}
 Z pakietu ,,Recommenderlab'' wybraliśmy:
 
 \begin{itemize}
-\item IBCF - Recommender based on item-based collaborative filtering (real data)
-\item POPULAR - Recommender based on item popularity (real data)
-\item UBCF - Recommender based on user-based collaborative filtering (real data)
+\item \textbf{IBCF - Recommender based on item-based collaborative filtering (real data)}\\
+Algorytm oparty na modelu (model based), wskazujący rekomendacje przedmiotów na podstawie podobieństwa wybranych i dobrze ocenionych przedmiotów przez użytkownika z innymi przedmiotami.\\
+W tym algorytmie wyznaczana jest macierz podobieństwa pomiędzy wszystkimi obiektami w bazie, z czego w celach wydajnościowych, dla każdego obiektu przechowywana jest pewna liczba najpodobniejszych obiektów. Operacja ta powoduje utworzenie modelu, dzięki któremu nie trzeba będzie analizować przy każdej rekomendacji całego zbioru danych.\\
+Aby dokonać rekomendacji, analizuje się podobne obiekty, do tych, które aktywny użytkownik ocenił (im lepiej ocenił dany obiekt, tym waga przedmiotów podobnych do niego będzie większa). Po takiej analizie wybierany jest obiekt (lub kilka obiektów), które otrzymały najlepszą ocenę.
+
+\item \textbf{UBCF - Recommender based on user-based collaborative filtering (real data)}\\
+Algorytm pamięciowy (memory based), opierający swe działanie na założeniu, że przedmioty wysoko oceniane przez podobnych użytkowników również powinny spodobać się danemu użytkownikowi.\\
+W algorytmie tym wyznaczane są współczynniki podobieństw między użytkownikiem aktywnym,\footnote{ang. Active User - użytkownik, dla którego szukamy rekomendacji} a wszystkimi innymi, po czym wybierana jest pewna liczba użytkowników najbardziej podobnych do aktywnego użytkownika. Innym słowem znajdowane jest k-sąsiedztwo użytkownika (k-NN). Następnie na podstawie ocen danego obiektu dokonanych przez k najpodobniejszych użytkowników przewidywana jest ocena obiektu przez aktywnego użytkownika.\\
+Za pomocą algorytmu można wyznaczyć ocenę konkretnego obiektu, jak i znaleźć kilka najlepszych rekomendacji dla danego użytkownika.
+
+\item \textbf{POPULAR - Recommender based on item popularity (real data)}\\
+Prosty algorytm, który generuje rekomendacje na podstawie popularności obiektów wśród użytkowników.
+
 \end{itemize}
+
 
 \section{Plan eksperymentów}
 
@@ -93,18 +63,22 @@ Z pakietu ,,Recommenderlab'' wybraliśmy:
 Chcemy znaleźć odpowiedzi na następujące pytania:
 
 \begin{enumerate}
+\item Jak wyglądają dane z którymi pracujemy? Jak rozkładają się oceny filmów? Jakie mają podstawowe wartości statystyczne?
+\item Jak wyglądają dane przed i po ich normalizacji?
 \item Który algorytm generuje lepsze wyniki?
-\item Który algorytm generuje szybciej wyniki?
+\item Który algorytm szybciej generuje wyniki?
 \item Jak sposób mierzenia podobieństwa wpływa na wyniki algorytmu?
 \item Który z algorytmów ma lepszą skalowalność?
 \item Jaki wpływ na wyniki algorytmu ma liczba podobnych użytkowników, używana do predykcji oceny?
 \item Jaki wpływ na wyniki algorytmu ma liczba podobnych filmów, używana do predykcji oceny?
-\item TODO
+\item Czy uzyskane oceny są faktycznie użyteczne? W celu odpowiedzi na to pytanie, wprowadzę siebie do danych i spróbuje uzyskać rekomendacje, których użyteczność mogę ocenić.
+\item Który algorytm radzi sobie lepiej dla małej ilości danych?
+\item Jak zwiększanie ilości danych wpływa na dokładność algorytmu?
 \end{enumerate}
 
 \subsection{Dane}
-Skorzystamy ze zbioru co najmniej 100 tysięcy ocen\footnote{w przypadku wystarczającej mocy 
-obliczeniowej skorzystamy z większej ilości danych} filmów przez użytkowników zawierających 
+Skorzystamy ze zbioru co najmniej 100 tysięcy ocen\footnote{w przypadku wystarczającej mocy
+obliczeniowej skorzystamy z większej ilości danych} filmów przez użytkowników zawierających
 następujace informacje:
 
 \begin{itemize}
@@ -115,34 +89,32 @@ następujace informacje:
 
 Każdy z użytkowników ma co najmniej 20 ocen filmów. Nie przewidujemy potrzeby wcześniejszej obróbki danych.
 
-TODO, czy tutaj warto napisać o normalizacji ocen użytkowników? Może warto żeby to było jakieś pytanie badawcze czy normalizacja ocen użytkowników ma pozytywny wpływ na wyniki algorytmów CF?
-
 \subsection{Badane parametry algorytmów}
+Będziemy badać następujące parametry:
+\begin{itemize}
+\item k w kNN \footnote{ang. k-nearest neighbors} - czyli jak ilość podobnych użytkowników / filmów służy predykcji oceny filmu,
+\item sposób wyznaczania podobieństwa: cosinus, pearson i inne dostępne miary z pakietu,
+\item sposób normalizacji,
+\item ilość dostępnych danych.
+\end{itemize}
 
-TODO czy to k da się ustawić w tym pakiecie recommenderlab?
-
-
-W przypadku algorytmów korzystających z podobieństwa przedmiotów do wyliczenia predykcji 
-zazwyczaj stosuje się k-NN\footnote{ang. k-nearest neighbors}. Jednym z parametrów 
-wymagających strojenia jest liczba $k$, a zatem ile podobnych przedmiotów na wpływ na 
-predykcje oceny.
 
 \subsection{Ewaluacja}
 
 \subsubsection{Podział zbioru danych}
 Zbiór danych zostanie podzielony na dwa rozłączone podzbiory. Zbiór danych do uczenia się\
-footnote{ang. learning set} oraz zbiór danych testowych\footnote{ang. test set}. Stosunek 
-zbioru określać będzie parametr $x$, gdzie $x = 0.9$ oznacza, że $90\%$ zbioru danych to 
+footnote{ang. learning set} oraz zbiór danych testowych\footnote{ang. test set}. Stosunek
+zbioru określać będzie parametr $x$, gdzie $x = 0.9$ oznacza, że $90\%$ zbioru danych to
 dane do uczenia się, a $10\%$ to dane testowe.
 
 \subsubsection{MAE}
-Współczynnik Mean Absolute Error jest popularnym współczynnikiem w ocenie dokładności 
-algorytmów rekomendacji. Liczy średnią z absolutnej różnicy pomiędzy predykcją, a prawdziwą 
+Współczynnik Mean Absolute Error jest popularnym współczynnikiem w ocenie dokładności
+algorytmów rekomendacji. Liczy średnią z absolutnej różnicy pomiędzy predykcją, a prawdziwą
 oceną.
 
 \begin{math}
 MAE = \frac{
-	\sum_{\substack{
+        \sum_{\substack{
    \{i, j\}
   }}
   |P_{i,j} - r_{i,j}|
@@ -150,30 +122,41 @@ MAE = \frac{
 \end{math}
 
 \subsubsection{RMSE}
-Root Mean Squarred Error (RMSE) jest również używamy do oceny algorytmów. Charakteryzuje 
+Root Mean Squarred Error (RMSE) jest również używamy do oceny algorytmów. Charakteryzuje
 się tym, że bardziej karze większe odchylenia od prawdziwych wartości ocen.
 
 \begin{math}
 RMSE = \sqrt{
-	\frac{1}{n} \sum_{ \substack{
-		\{i,j\}
-	} }
-	(P_{i,j} - r_{i,j})^2
+        \frac{1}{n} \sum_{ \substack{
+                \{i,j\}
+        } }
+        (P_{i,j} - r_{i,j})^2
 }
 \end{math}
-gdzie $n$ to całkowita liczba ocen wszystkich użytkowników. $P_{i,j}$ to predykcja oceny 
+gdzie $n$ to całkowita liczba ocen wszystkich użytkowników. $P_{i,j}$ to predykcja oceny
 dla użytkownika $i$ przedmiotu $j$. $r_{i,j}$ to prawdziwa ocena.
 
 \subsubsection{Accuracy}
-TODO
+Określa procent poprawnych rekomendacji, spośród wszystkich dokonanych rekomendacji.\\
+$Accuracy = \frac{Poprawne\:rekomendacje}{Wszystkie \:poprawne\: rekomendacje}$
 \subsubsection{Precision}
-TODO
+Wskazuje jaka część polecanych obiektów została zarekomendowana poprawnie\\
+$Precision = \frac{Poprawne \:rekomendacje}{Wszystkie\: rekomendacje}$
 \subsubsection{Recall}
-TODO
+Określa jaki jest procent poprawnych rekomendacji, spośród wszystkich poprawnych rekomendacji wykryto.\\
+$Accuracy = \frac{Poprawne\:rekomendacje}{Wszystkie \:możliwe \:poprawne\: rekomendacje}$
 \subsubsection{F-Measure}
-TODO
+Wskaźniki Precision i Recall działają antagonistycznie, gdy jeden jest wyższy zazwyczaj wartość drugiego maleje. F-Measure jest złożeniem tych dwóch miar jakości.\\
+$F-Measure = \frac{2*Precision*Recall}{Precision + Recall}$
+
+
+\section{Otwarte kwestie}
+Istnieją rozszerzenia dla algorytmów kolaboratywnej filtracji takie jak, domyślne wartości ocen, amplifikacja wag, odwrócona częstość ocen. Jeśli chcielibyśmy sprawdzić jaki wpływ mają takie rozszerzenia na działanie algorytmu musielibyśmy ingerować w kod pakietu ,,Recommenderlab’’. To czy będziemy to robić, jaki jest tego koszt i czy leży to w kwestii naszego zadania pozostaje kwestią otwartą, która będzie można wyjaśnić w momencie, gdy zapoznamy się bliżej z pakietem i jego możliwościami.
+
+Nie wiemy również czy mamy możliwości określenia w jaki sposób ma być budowany model w przypadku IBCF. Z naszej wiedzy wynika, że pakiet Recommenderlab buduje model w oparciu o podobieństwo. Należy sprawdzić czy jest możliwe zbudowanie modelu w oparciu o odchylenia.
 
 \nocite{*}
 \bibliographystyle{plainnat}
 \bibliography{bibliography}
 \end{document}
+
