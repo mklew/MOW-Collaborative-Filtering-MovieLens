@@ -9,7 +9,7 @@ createUsersMatrix<-function(dataTable)
   users = 943
   
   #read movie names
-  movieInfo = read.csv(file="data\\u.item",sep="|",header=FALSE) #read movies info from file as table
+  movieInfo = read.csv(file=file.path("data", "u.item"),sep="|",header=FALSE) #read movies info from file as table
   movieMatrix = as(movieInfo,"matrix") #matrix is better to read
   movieNames = movieMatrix[,2]
   
