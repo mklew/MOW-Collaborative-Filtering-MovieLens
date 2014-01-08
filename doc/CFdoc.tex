@@ -7,6 +7,8 @@
 \usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage[numbers]{natbib}
+\usepackage{float}
+\usepackage{graphicx}
 \title{\textbf{Kolaboratywna filtracja na podstawie ocen filmów z bazy MovieLens}}
 \author{Marek Lewandowski \\ Michał Karpiuk}
 \date{}
@@ -154,6 +156,91 @@ $F-Measure = \frac{2*Precision*Recall}{Precision + Recall}$
 Istnieją rozszerzenia dla algorytmów kolaboratywnej filtracji takie jak, domyślne wartości ocen, amplifikacja wag, odwrócona częstość ocen. Jeśli chcielibyśmy sprawdzić jaki wpływ mają takie rozszerzenia na działanie algorytmu musielibyśmy ingerować w kod pakietu ,,Recommenderlab’’. To czy będziemy to robić, jaki jest tego koszt i czy leży to w kwestii naszego zadania pozostaje kwestią otwartą, która będzie można wyjaśnić w momencie, gdy zapoznamy się bliżej z pakietem i jego możliwościami.
 
 Nie wiemy również czy mamy możliwości określenia w jaki sposób ma być budowany model w przypadku IBCF. Z naszej wiedzy wynika, że pakiet Recommenderlab buduje model w oparciu o podobieństwo. Należy sprawdzić czy jest możliwe zbudowanie modelu w oparciu o odchylenia.
+
+\section{Odpowiedzi na pytania badawcze}
+
+\subsection{Jak wyglądają dane z którymi pracujemy? Jak rozkładają się oceny filmów? Jakie mają podstawowe wartości statystyczne?}
+Wykres \ref{fig:histogram-ocen-nieznorm} przedstawia rozkład ocen nieznormalizowanych. 
+
+\begin{figure}[H]
+  \begin{center}
+  \fbox{
+    \includegraphics[width=\textwidth]{img/u1base--histogram_ocen.pdf}
+  }
+  \end{center}
+  \caption{Rozkład ocen nieznormalizowanych}
+  \label{fig:histogram-ocen-nieznorm}
+\end{figure}
+
+\begin{center}
+    \begin{tabular}{ | l | p{2cm} |}
+    \hline
+    Mediana ocen & 4  \\ \hline
+    Średnia ocena & 3.528  \\ \hline
+    Najmniejsza liczba filmów ocenionych przez użytkownika & 4  \\ \hline
+    Największa liczba filmów ocenionych przez użytkownika & 685  \\ \hline
+    Najmniejsza średnia ocena & 1.51 \\ \hline
+    Największa średnia ocena & 4.86  \\ \hline    
+    Średnia liczba filmów oceniona przez użytkownika & 84.83563 \\ \hline
+    \end{tabular}
+\end{center}
+
+\subsubsection{Wnioski}
+Patrząc na wykres powyżej, medianę oraz średnią ocene można wywnioskować, że zazwyczaj oceny, które się pojawiają są ocenami pozytywnymi. Oznacza to tyle, że ocenia się częściej to co się lubi i tych ocen jest najwięcej. Dane mogą być jednak zaburzone przez ludzi, którzy oceniają filmy w sposób dla ich tendencyjny np. nie stosując ocen pośrednich dając jedynie oceny najniższe i najwyższe.
+
+\subsection{Jak wyglądają dane przed i po ich normalizacji?}
+Wykres \ref{fig:histogram-ocen-norm} przedstawia wyniki znormalizowane. Wyniki nieznormalizowane przedstawione zostały na wykresie \ref{fig:histogram-ocen-nieznorm}. Po normalizacji oceny wyglądają podobnie do rozkładu normalnego.
+\begin{figure}[H]
+  \begin{center}
+  \fbox{
+    \includegraphics[width=\textwidth]{img/u1base--histogram_ocen_norm.pdf}
+  }
+  \end{center}
+  \caption{Rozkład ocen znormalizowanych}
+  \label{fig:histogram-ocen-norm}
+\end{figure}
+
+\subsubsection{Wnioski}
+
+\subsection{Który algorytm generuje lepsze wyniki?}
+
+\subsubsection{Wnioski}
+
+\subsection{Który algorytm szybciej generuje wyniki?}
+
+\subsubsection{Wnioski}
+
+\subsection{Jak sposób mierzenia podobieństwa wpływa na wyniki algorytmu?}
+
+\subsubsection{Wnioski}
+
+\subsection{Który z algorytmów ma lepszą skalowalność?}
+
+\subsubsection{Wnioski}
+
+\subsection{Jaki wpływ na wyniki algorytmu ma liczba podobnych użytkowników, używana do predykcji oceny?}
+
+\subsubsection{Wnioski}
+
+\subsection{Jaki wpływ na wyniki algorytmu ma liczba podobnych filmów, używana do predykcji oceny?}
+
+\subsubsection{Wnioski}
+
+\subsection{Czy uzyskane oceny są faktycznie użyteczne?}
+
+\subsubsection{Wnioski}
+
+\subsection{Który algorytm radzi sobie lepiej dla małej ilości danych?}
+
+\subsubsection{Wnioski}
+
+\subsection{Jak zwiększanie ilości danych wpływa na dokładność algorytmu?}
+
+\subsubsection{Wnioski}
+
+\section{Podsumowanie}
+
+\subsection{Wnioski końcowe}
 
 \nocite{*}
 \bibliographystyle{plainnat}
