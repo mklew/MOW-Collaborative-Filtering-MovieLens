@@ -4,7 +4,8 @@ userRatingsFile = "u1.base"
 getFilePath <- function(filename, prefix)
 {
 	pathToImages = file.path("doc", "img")
-	return (file.path(pathToImages, paste(prefix,"--",filename,sep='')))
+	fnNoDots <- gsub(".", "", filename, fixed=T)
+	return (file.path(pathToImages, paste(prefix,"--",fnNoDots,sep='')))
 }
 
 
