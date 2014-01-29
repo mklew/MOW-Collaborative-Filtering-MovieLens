@@ -1,41 +1,20 @@
 library('reshape2')
+library('ggplot2')
 userRatingsFile = "u1.base"
-
-getFilePath <- function(filename, prefix)
-{
-	pathToImages = file.path("doc", "img")
-	fnNoDots <- gsub(".", "", filename, fixed=T)
-	return (file.path(pathToImages, paste(prefix,"--",fnNoDots,sep='')))
-}
-
-
-# createHistograms <- function(userRatingsFile)
-# {
-# 	data = createUsersMatrix(read.table(file.path("data",userRatingsFile)))
-# 	plot = qplot(getRatings(data), binwidth = 1, 
-#       geom="histogram", xlab="Oceny", ylab="Częstość",main="Histogram ocen")
-# 	ggsave(plot,file=getFilePath("histogram_ocen.pdf", userRatingsFile))
-
-# 	plot2 = qplot(getRatings(normalize(data, method = "Z-score")),
-#       geom="histogram", xlab="Oceny", ylab="Częstość",main="Histogram ocen znormalizowanych")
-# 	ggsave(plot2,file=getFilePath("histogram_ocen_norm.pdf", userRatingsFile))
-#}
-#createHistograms(userRatingsFile)
-
 
 # getRatings reads all non missing ratings as vector
 
 
 data = createUsersMatrix(read.table(file.path("data",userRatingsFile)))
-plot = qplot(getRatings(data), binwidth = 1, 
+plot1 = qplot(getRatings(data), binwidth = 1, 
   geom="histogram", xlab="Oceny", ylab="Freq",main="Histogram ocen", fill= ..count..)
 
 # przy zapisie nie ma polskich znaków ; (
-ggsave(plot,file=getFilePath("histogram_ocen.pdf", userRatingsFile))
+ggsave(plot=plot,file="histogram_ocen.pdf")
 
 plot2 = qplot(getRatings(normalize(data, method = "Z-score")),
   geom="histogram", xlab="Oceny", ylab="Freq",main="Histogram ocen znormalizowanych", fill=..count..)
-ggsave(plot2,file=getFilePath("histogram_ocen_norm.pdf", userRatingsFile))
+ggsave(plot2,file="histogram_ocen_norm.pdf")
 
 
 # basic stats
