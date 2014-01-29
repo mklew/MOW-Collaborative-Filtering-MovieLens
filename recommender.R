@@ -2,6 +2,7 @@ data(MovieLense)        #load MovieLense 100k data into workspace from recommend
 source('functions.R')
 library('recommenderlab')
 library('ROCR')
+library('xtable')
 
 #read all data from file and convert it into recommenderlab structure
 allData = MovieLense 
@@ -89,6 +90,16 @@ similarityMethods.benchmark <- function(scheme) {
 		ibcf.errors=ibcfErrors, ibcf.cosine = ibcf.cosine, ibcf.pearson=ibcf.pearson, ibcf.jaccard=ibcf.jaccard)
 }
 
+similarityMethods.benchmark.saveData <- function(resultsMatrix, fileName, caption) {
+	ibcfSMTable <- xtable(data.frame(resultsMatrix), caption=caption)
+	ibcfSMTableFile <- file(file.path("doc", fileName))
+	writeLines(print(ibcfSMTable, type="latex"), ibcfSMTableFile)
+	close(ibcfSMTableFile)
+}
+
 results <- similarityMethods.benchmark(scheme)
-results$ubcf.errors
+
+similarityMethods.benchmark.saveData(results$ibcf.errors, "ibcfSimilarityTableErrors.tex", c('Porównanie metod podobieństwa dla IBCF'))
+similarityMethods.benchmark.saveData(results$ubcf.errors, "ubcfSimilarityTableErrors.tex", c('Porównanie metod podobieństwa dla UBCF'))
+
 
