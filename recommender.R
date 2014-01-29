@@ -130,11 +130,40 @@ ubcf.nn.benchmark <- function(scheme) {
 	list(errorsAndTime = errorsAndTime, evaluationResults = evaluationResults)
 }
 
+ibcf.k.benchmark <- function(scheme) {
+	ibcfCommonParameters = list(method="Cosine", normalize='center', alpha=0.5)
+	trainingData <- getData(scheme, "train")
+	knownData <- getData(scheme, "known")	
+	unknownData <- getData(scheme, "unknown")	
+	# od k=5 ze skokiem 20 aż do arbitralnego 150
+	ks <- seq(5, 150, 20)
+	algorithms <- list()
+	errorsAndTime <- c()
+	# TODO odkomentować tą pętle
+	# for(k in ks) {
+	for(k in 5:10) {
+		algorithmParameters <- c(ibcfCommonParameters, k=k)
+		algorithms[[paste("IBCF k=", k)]] = list(name="IBCF", param=algorithmParameters)
+		ibcf <- 0
+		timeToBuildRecommender <- system.time({
+			ibcf <- Recommender(trainingData, method="IBCF", parameter=algorithmParameters)
+		})
+		ibcf.predictions <- predict(ibcf, knownData, type="ratings")
+		errors <- calcPredictionError(ibcf.predictions, unknownData)
+		errorsAndTime <- rbind(c(k, timeToBuildRecommender[3], errors), errorsAndTime)
+	}
+	colnames(errorsAndTime) <- c("k", "czas", "MAE", "MSE", "RMSE")
+	evaluationResults <- evaluate(scheme,algorithms,n=c(1,3,5,10,20))
+	list(errorsAndTime = errorsAndTime, evaluationResults = evaluationResults)
+}
+
+
 #results <- similarityMethods.benchmark(scheme)
 
 #similarityMethods.benchmark.saveData(results$ibcf.errors, "ibcfSimilarityTableErrors.tex", c('Porównanie metod podobieństwa dla IBCF'))
 #similarityMethods.benchmark.saveData(results$ubcf.errors, "ubcfSimilarityTableErrors.tex", c('Porównanie metod podobieństwa dla UBCF'))
 
 
-results <- ubcf.nn.benchmark(scheme)
+# results <- ubcf.nn.benchmark(scheme)
+results <- ibcf.k.benchmark(scheme)
 
