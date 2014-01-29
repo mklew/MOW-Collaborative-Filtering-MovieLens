@@ -97,12 +97,18 @@ similarityMethods.benchmark.saveData <- function(resultsMatrix, fileName, captio
 	close(ibcfSMTableFile)
 }
 
+
+#
+#	Przeprowadza test parametru nn algorytmu UBCF i zwraca wyniki pozwalające na rysowanie wykresów
+#
 # z tego można narysować wykresy:
 #	- jak się zmienia błąd (MAE, MSE, RMSE) w zależności od nn
 # 	- jak się zmienia czas w zależności od nn
 #	- jak wyglądają krzywe ROC dla ewaluacji algorytmów z różnym nn
-
-#result$errorsAndTime to jest macierz z kolumnami [nn, czas, MAE, MSE, RMSE]
+#
+#	zwraca liste
+#		$errorsAndTime to jest macierz z kolumnami [nn, czas, MAE, MSE, RMSE]
+#		$evaluationResults to wyniki evaluate dla różnych wartości nn przy reszcie parametrów takich samych
 ubcf.nn.benchmark <- function(scheme) {
 	ubcfCommonParameters = list(method="Cosine", normalize='center', minRating=4)
 	trainingData <- getData(scheme, "train")
@@ -130,6 +136,13 @@ ubcf.nn.benchmark <- function(scheme) {
 	list(errorsAndTime = errorsAndTime, evaluationResults = evaluationResults)
 }
 
+# Funcka przeprowadza test parametry k dla algorytmu IBCF. Parametr k to ile podobnych przedmiotów 
+# ma być branych pod uwagę.
+#	
+#	Zwraca listę
+#		$errorsAndTime to macierz z kolumnami "k", "czas", "MAE", "MSE", "RMSE"
+#		$evaluationResults to wyniki evaluate dla różnych k algorytmu IBCF przy reszcie parametrow takich samych
+#
 ibcf.k.benchmark <- function(scheme) {
 	ibcfCommonParameters = list(method="Cosine", normalize='center', alpha=0.5)
 	trainingData <- getData(scheme, "train")
