@@ -180,3 +180,23 @@ ibcf.k.benchmark <- function(scheme) {
 # results <- ubcf.nn.benchmark(scheme)
 results <- ibcf.k.benchmark(scheme)
 
+# Tworzy wykresy bazując na wynikach z ibcf.k.benchmark
+ibcf.k.benchmark.saveGraphs <- function(ibcf.k.benchmark.results) {
+	errorsAndTimeDF <- data.frame(ibcf.k.benchmark.results$errorsAndTime)
+	q <- qplot(k, MAE, data=errorsAndTimeDF, geom="line", xlab="parametr k", main="MAE(k)")	
+	ggsave(file.path("doc", "img", "ibcf-K-MAE.pdf"))
+	q <- qplot(k, MSE, data=errorsAndTimeDF, geom="line", xlab="parametr k", main="MSE(k)")	
+	ggsave(file.path("doc", "img", "ibcf-K-MSE.pdf"))
+	q <- qplot(k, RMSE, data=errorsAndTimeDF, geom="line", xlab="parametr k", main="RMSE(k)")	
+	ggsave(file.path("doc", "img", "ibcf-K-RMSE.pdf"))
+	q <- qplot(k, czas, data=errorsAndTimeDF, geom="line", xlab="parametr k", main="czas(k)")	
+	ggsave(file.path("doc", "img", "ibcf-K-czas.pdf"))
+
+	pdf(file.path("doc", "img", "ibcf-K-ROC.pdf"))
+	plot(results$evaluationResults)
+	dev.off()
+
+	pdf(file.path("doc", "img", "ibcf-K-PREC-REC.pdf"))
+	plot(results$evaluationResults, "prec/rec", annotate=TRUE)
+	dev.off()
+}
