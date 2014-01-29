@@ -46,6 +46,10 @@ similarityMethods.benchmark <- function(scheme) {
 	ubcfParamsPearson = list(method="pearson", normalize='center', nn=25, minRating=4)
 	ubcfParamsJaccard = list(method="jaccard", normalize='center', nn=25, minRating=4)
 
+	ibcfParamsCosine = list(method="Cosine", normalize='center', k=30, alpha=0.5)
+	ibcfParamsPearson = list(method="pearson", normalize='center', k=30, alpha=0.5)
+	ibcfParamsJaccard = list(method="jaccard", normalize='center', k=30, alpha=0.5)
+
 	trainingData <- getData(scheme, "train")
 	knownData <- getData(scheme, "known")	
 	
@@ -66,8 +70,23 @@ similarityMethods.benchmark <- function(scheme) {
 	)
 	rownames(ubcfErrors) <- c("UBCF cosine","UBCF Pearson", "UBCF Jaccard")
 
-	ubcfErrors
-	list(ubcf.errors=ubcfErrors, ubcf.cosine = ubcf.cosine, ubcf.pearson=ubcf.pearson, ubcf.jaccard=ubcf.jaccard)
+	ibcf.cosine <- Recommender(trainingData, method="IBCF", parameter=ibcfParamsCosine)
+	ibcf.pearson <- Recommender(trainingData, method="IBCF", parameter=ibcfParamsPearson)
+	ibcf.jaccard <- Recommender(trainingData, method="IBCF", parameter=ibcfParamsJaccard)
+
+	ibcf.cosine.predictions <- predict(ibcf.cosine, knownData, type="ratings")
+	ibcf.pearson.predictions <- predict(ibcf.pearson, knownData, type="ratings")
+	ibcf.jaccard.predictions <- predict(ibcf.jaccard, knownData, type="ratings")
+
+	ibcfErrors <- rbind(
+		calcPredictionError(ibcf.cosine.predictions, unknownData),
+		calcPredictionError(ibcf.pearson.predictions, unknownData),
+ 		calcPredictionError(ibcf.jaccard.predictions, unknownData)
+	)
+	rownames(ibcfErrors) <- c("IBCF cosine","IBCF Pearson", "IBCF Jaccard")
+
+	list(ubcf.errors=ubcfErrors, ubcf.cosine = ubcf.cosine, ubcf.pearson=ubcf.pearson, ubcf.jaccard=ubcf.jaccard,
+		ibcf.errors=ibcfErrors, ibcf.cosine = ibcf.cosine, ibcf.pearson=ibcf.pearson, ibcf.jaccard=ibcf.jaccard)
 }
 
 results <- similarityMethods.benchmark(scheme)
