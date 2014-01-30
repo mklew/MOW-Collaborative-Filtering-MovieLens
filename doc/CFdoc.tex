@@ -150,13 +150,20 @@ Wskaźniki Precision i Recall działają antagonistycznie, gdy jeden jest wyższ
 $F-Measure = \frac{2*Precision*Recall}{Precision + Recall}$
 
 
-\section{Otwarte kwestie}
+\section{Rozwiązanie otwartych kwestii}
+We wstępnej dokumentacji przedstawiliśmy otwarte kwestie. Przytoczę je tutaj na prawie cytatu.
+
+\subsection{Otwarte kwestie}
 Istnieją rozszerzenia dla algorytmów kolaboratywnej filtracji takie jak, domyślne wartości ocen, amplifikacja wag, odwrócona częstość ocen. Jeśli chcielibyśmy sprawdzić jaki wpływ mają takie rozszerzenia na działanie algorytmu musielibyśmy ingerować w kod pakietu ,,Recommenderlab’’. To czy będziemy to robić, jaki jest tego koszt i czy leży to w kwestii naszego zadania pozostaje kwestią otwartą, która będzie można wyjaśnić w momencie, gdy zapoznamy się bliżej z pakietem i jego możliwościami.
 
 Nie wiemy również czy mamy możliwości określenia w jaki sposób ma być budowany model w przypadku IBCF. Z naszej wiedzy wynika, że pakiet Recommenderlab buduje model w oparciu o podobieństwo. Należy sprawdzić czy jest możliwe zbudowanie modelu w oparciu o odchylenia.
 
-\section{Odpowiedzi na pytania badawcze}
+\subsection{Rozwiązania}
+Ze względu na ograniczoną ilość zasobów i sporą liczbę badań, które przeprowadziliśmy nie dodawaliśmy dodatkowych funkcjonalności jak amplifikacja wag czy też innych technik. Używaliśmy pakietu \emph{recommenderlab}, który sam w sobie okazał się być problematyczny ze względu za błędy. Ostatnia poprawka, która nas blokowała została wprowadzona dopiero 14 stycznia br. 
 
+Pakiet \emph{recommenderlab} dla algorytmu IBCF buduje model w oparciu o miarę podobieństwa. Sama miara podobieństwa może być wybrana spośród kilku dostępnych - jest to przedmiotem badań w dalszej części dokumentacji. Nie ma łatwego sposobu, aby budować model w oparciu o odchylenia.
+
+\section{Odpowiedzi na pytania badawcze}
 \subsection{Jak wyglądają dane z którymi pracujemy? Jak rozkładają się oceny filmów? Jakie mają podstawowe wartości statystyczne?}
 Wykres \ref{fig:histogram-ocen-nieznorm} przedstawia rozkład ocen nieznormalizowanych. 
 
