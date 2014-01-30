@@ -1,9 +1,9 @@
-data(MovieLense)        #load MovieLense 100k data into workspace from recommender package (optional - we have our data)
 source('functions.R')
 library('recommenderlab')
 library('ROCR')
 library('xtable')
 library('ggplot2')
+data(MovieLense)        #load MovieLense 100k data into workspace from recommender package (optional - we have our data)
 
 #read all data from file and convert it into recommenderlab structure
 allData = MovieLense 
@@ -23,11 +23,11 @@ allData = MovieLense
 scheme = evaluationScheme(allData, method="split",train=0.8, goodRating = 4)
 algorithms <- list(
    "popular items" = list(name="POPULAR", param=NULL),
-   "user-based CF Cosine center nn50" = list(name="UBCF", param=list(method="Cosine", normalize='center', nn=20, minRating=4)),
-   "user-based CF Pearson center nn50" = list(name="UBCF", param=list(method="pearson", normalize='center', nn=20, minRating=4)), 
-   "user-based CF jaccard center nn50" = list(name="UBCF", param=list(method="jaccard", normalize='center', nn=20, minRating=4)),   
-   "user-based CF jaccard center nn50" = list(name="UBCF", param=list(method="jaccard", normalize='center', nn=20, minRating=4)),   
-   "user-based CF Pearson z-index nn50" = list(name="UBCF", param=list(method="pearson", normalize='Z-score', nn=20, minRating=4)),
+   "user-based CF Cosine center nn50" = list(name="UBCF", param=list(method="Cosine", normalize='center', nn=20)),
+   "user-based CF Pearson center nn50" = list(name="UBCF", param=list(method="pearson", normalize='center', nn=20)), 
+   "user-based CF jaccard center nn50" = list(name="UBCF", param=list(method="jaccard", normalize='center', nn=20)),   
+   "user-based CF jaccard center nn50" = list(name="UBCF", param=list(method="jaccard", normalize='center', nn=20)),   
+   "user-based CF Pearson z-index nn50" = list(name="UBCF", param=list(method="pearson", normalize='Z-score', nn=20)),
    "item-based CF Cosine center" = list(name="IBCF", param=(list(k = 30, method="Cosine", normalize = "center",  alpha = 0.5))),
    "item-based CF pearson center" = list(name="IBCF", param=(list(k = 5, method="pearson", normalize = "center",  alpha = 0.5))),   		
 	"item-based CF jaccard center" = list(name="IBCF", param=(list(k = 5, method="jaccard", normalize = "center",  alpha = 0.5))),	
@@ -44,9 +44,9 @@ algorithms <- list(
 #
 similarityMethods.benchmark <- function(scheme) {	
 	# Porównanie tylko UBCF między sobą, 
-	ubcfParamsCosine = list(method="Cosine", normalize='center', nn=25, minRating=4)
-	ubcfParamsPearson = list(method="pearson", normalize='center', nn=25, minRating=4)
-	ubcfParamsJaccard = list(method="jaccard", normalize='center', nn=25, minRating=4)
+	ubcfParamsCosine = list(method="Cosine", normalize='center', nn=25)
+	ubcfParamsPearson = list(method="pearson", normalize='center', nn=25)
+	ubcfParamsJaccard = list(method="jaccard", normalize='center', nn=25)
 
 	ibcfParamsCosine = list(method="Cosine", normalize='center', k=30, alpha=0.5)
 	ibcfParamsPearson = list(method="pearson", normalize='center', k=30, alpha=0.5)
@@ -111,7 +111,7 @@ similarityMethods.benchmark.saveData <- function(resultsMatrix, fileName, captio
 #		$errorsAndTime to jest macierz z kolumnami [nn, czas, MAE, MSE, RMSE]
 #		$evaluationResults to wyniki evaluate dla różnych wartości nn przy reszcie parametrów takich samych
 ubcf.nn.benchmark <- function(scheme, startNN, step, maxNN) {
-	ubcfCommonParameters = list(method="Cosine", normalize='center', minRating=4)
+	ubcfCommonParameters = list(method="Cosine", normalize='center')
 	trainingData <- getData(scheme, "train")
 	knownData <- getData(scheme, "known")	
 	unknownData <- getData(scheme, "unknown")	
