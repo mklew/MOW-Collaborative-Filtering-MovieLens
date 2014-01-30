@@ -330,7 +330,7 @@ Poniższe wykresy przedstawiają wartości błędów predykcji dla zadanego para
 \subsubsection{Wnioski}
 Z wykresów wartości błędów można wywnioskować, że najlepsza wartość parametru znajduje się w okolicy $nn=120$. Dalsze zwiększanie parametru NN - prowadzi do zwiększania się błędów. Można to tłumaczyć tym, że jest to za duża wartość w stosunku do naprawdę innych bliskich osób o podobnych preferencjach. Ze zbyt wysoką wartością $nn$ zaczynamy uwzględniać osoby, które mają odmienne preferencje co prowadzi do gorszych predykcji, a zatem ogólny błąd jest większy.
 
-TODO wnioski na podstawie tego precision recall i ROC
+% TODO wnioski na podstawie tego precision recall i ROC
 
 \subsection{Jaki wpływ na wyniki algorytmu ma liczba podobnych filmów, używana do predykcji oceny?}
 W tym badaniu interesuje nas parametr $k$ algorytmu IBCF. 
@@ -407,7 +407,7 @@ Poniższe wykresy przedstawiają wartości błędów predykcji dla zadanego para
 \subsubsection{Wnioski}
 Analizując wykresy błędów, można dojść do podobnych wniosków jak przy wysokich wartościach parametru $nn$ w algorytmie UBCF - dla dużych wartości $k$ i stosunkowo niedużego zbioru danych zaczynamy brać pod uwagę mało podobne filmy do budowy modelu co przekłada się na gorsze predykcje i większe błędy na zbiorze testowym.
 
-TODO wnioski o ROC, precision/RECALL
+% TODO wnioski o ROC, precision/RECALL
 
 \subsection{Który algorytm radzi sobie lepiej dla małej ilości danych?}
 
@@ -418,8 +418,16 @@ TODO wnioski o ROC, precision/RECALL
 \subsubsection{Wnioski}
 
 \section{Podsumowanie}
+Odpowiedzieliśmy na wszystkie postawione pytania badawcze. 
+% TODO co więcej?
 
 \subsection{Wnioski końcowe}
+W ramach tej pracy zapoznaliśmy się szczegółowo z algorytmami IBCF, UBCF i przebadaliśmy parametry, które mają wpływ na ich działanie. Przeanalizowaliśmy także złożoność czasową algorytmów oraz TODO
+
+Kolaboratywna filtracja jest ciekawą techniką, zwłaszcza w ujęciu komercyjnych zastosowań. Algorytmy UBCF i IBCF pozwalają na użycie ich w rzeczywistym przypadku. Wiedza na temat różnic pomiędzy algorytmami oraz to jaki wpływ mają różne parametry na ich działanie jest krytyczna. Dzięki przeprowadzonym badaniom, możemy stwierdzić, że taką wiedzę posiadamy.
+
+% TODO coś jeszcze ?? Starałem się to jakoś ładnie napisać
+
 
 \nocite{*}
 \bibliographystyle{plainnat}
