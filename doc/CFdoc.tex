@@ -165,25 +165,15 @@ Wykres \ref{fig:histogram-ocen-nieznorm} przedstawia rozkład ocen nieznormalizo
 \begin{figure}[H]
   \begin{center}
   \fbox{
-    \includegraphics[width=\textwidth]{img/u1base--histogram_ocen.pdf}
+    \includegraphics[width=\textwidth]{img/histogram_ocen.pdf}
   }
   \end{center}
   \caption{Rozkład ocen nieznormalizowanych}
   \label{fig:histogram-ocen-nieznorm}
 \end{figure}
 
-\begin{center}
-    \begin{tabular}{ | l | p{2cm} |}
-    \hline
-    Mediana ocen & 4  \\ \hline
-    Średnia ocena & 3.528  \\ \hline
-    Najmniejsza liczba filmów ocenionych przez użytkownika & 4  \\ \hline
-    Największa liczba filmów ocenionych przez użytkownika & 685  \\ \hline
-    Najmniejsza średnia ocena & 1.51 \\ \hline
-    Największa średnia ocena & 4.86  \\ \hline    
-    Średnia liczba filmów oceniona przez użytkownika & 84.83563 \\ \hline
-    \end{tabular}
-\end{center}
+Poniższa tabelka zawiera statystyki zbioru danych, z którym pracujemy. Statystyki pozwalają zorientować się z tym jak wygląda zbiór danych.
+\input{statystyki-zbioru.tex}
 
 \subsubsection{Wnioski}
 Patrząc na wykres powyżej, medianę oraz średnią ocene można wywnioskować, że zazwyczaj oceny, które się pojawiają są ocenami pozytywnymi. Oznacza to tyle, że ocenia się częściej to co się lubi i tych ocen jest najwięcej. Dane mogą być jednak zaburzone przez ludzi, którzy oceniają filmy w sposób dla ich tendencyjny np. nie stosując ocen pośrednich dając jedynie oceny najniższe i najwyższe.
@@ -193,7 +183,7 @@ Wykres \ref{fig:histogram-ocen-norm} przedstawia wyniki znormalizowane. Wyniki n
 \begin{figure}[H]
   \begin{center}
   \fbox{
-    \includegraphics[width=\textwidth]{img/u1base--histogram_ocen_norm.pdf}
+    \includegraphics[width=\textwidth]{img/histogram_ocen_norm.pdf}
   }
   \end{center}
   \caption{Rozkład ocen znormalizowanych}
