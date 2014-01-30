@@ -165,15 +165,25 @@ Wykres \ref{fig:histogram-ocen-nieznorm} przedstawia rozkład ocen nieznormalizo
 \begin{figure}[H]
   \begin{center}
   \fbox{
-    \includegraphics[width=\textwidth]{img/histogram_ocen.pdf}
+    \includegraphics[width=\textwidth]{img/u1base--histogram_ocen.pdf}
   }
   \end{center}
   \caption{Rozkład ocen nieznormalizowanych}
   \label{fig:histogram-ocen-nieznorm}
 \end{figure}
 
-Poniższa tabelka zawiera statystyki zbioru danych, z którym pracujemy. Statystyki pozwalają zorientować się z tym jak wygląda zbiór danych.
-\input{statystyki-zbioru.tex}
+\begin{center}
+    \begin{tabular}{ | l | p{2cm} |}
+    \hline
+    Mediana ocen & 4  \\ \hline
+    Średnia ocena & 3.528  \\ \hline
+    Najmniejsza liczba filmów ocenionych przez użytkownika & 4  \\ \hline
+    Największa liczba filmów ocenionych przez użytkownika & 685  \\ \hline
+    Najmniejsza średnia ocena & 1.51 \\ \hline
+    Największa średnia ocena & 4.86  \\ \hline    
+    Średnia liczba filmów oceniona przez użytkownika & 84.83563 \\ \hline
+    \end{tabular}
+\end{center}
 
 \subsubsection{Wnioski}
 Patrząc na wykres powyżej, medianę oraz średnią ocene można wywnioskować, że zazwyczaj oceny, które się pojawiają są ocenami pozytywnymi. Oznacza to tyle, że ocenia się częściej to co się lubi i tych ocen jest najwięcej. Dane mogą być jednak zaburzone przez ludzi, którzy oceniają filmy w sposób dla ich tendencyjny np. nie stosując ocen pośrednich dając jedynie oceny najniższe i najwyższe.
@@ -183,7 +193,7 @@ Wykres \ref{fig:histogram-ocen-norm} przedstawia wyniki znormalizowane. Wyniki n
 \begin{figure}[H]
   \begin{center}
   \fbox{
-    \includegraphics[width=\textwidth]{img/histogram_ocen_norm.pdf}
+    \includegraphics[width=\textwidth]{img/u1base--histogram_ocen_norm.pdf}
   }
   \end{center}
   \caption{Rozkład ocen znormalizowanych}
@@ -212,34 +222,22 @@ Dostępne miary podobieństwa to:
 Różnice w poszczególnych parametrach algorytmów UBCF i IBCF były tylko na poziomie metody obliczania podobieństwa. W ten sposób mogliśmy stwierdzić jak metoda podobieństwa ma wpływ na wyniki algorytmu przy reszcie paramertów takich samych. 
 
 \subsubsection{UBCF}
-Wspólne parametry dla algorytmu UBCF:
-\begin{itemize}
-\item metoda normalizacji: \emph{center}
-\item $nn = 25$
-\end{itemize}
+TODO co jest najlepsze a co najgorsze
 
-W przypadku UBCF najlepszą miarą podobieństwa okazał się współczynnik korelacji \emph{Pearson}. Najgorsze wyniki uzyskano dla metody \emph{Jaccard}.
+W przypadku UBCF najlepszą miarą podobieństwa okazała się metoda TODO. Najgorzej poradził sobie TODO.
 
 \input{ubcfSimilarityTableErrors.tex}
 
 \subsubsection{IBCF}
-Wspólne parametry dla algorytmu IBCF:
-\begin{itemize}
-\item metoda normalizacji: \emph{center}
-\item zapamiętana liczba najbardziej podobnych filmów: $k = 30$
-% \item $alpha=0.5$ % ta alpha to parametr dla metody liczenia podobieńsa "Karypis" ale my jej nie badamy, bo nie działało 
-\end{itemize}
-
-W przypadku IBCF najlepszą miarą podobieństwa okazała się metoda cosinus. W przeciwieństwie do UBCF najgorzej poradził sobie współczynnik korelacji \emph{Pearsona}.
+W przypadku IBCF najlepszą miarą podobieństwa okazała się metoda TODO. Najgorzej poradził sobie TODO.
 
 \input{ibcfSimilarityTableErrors.tex}
 
 \subsubsection{Wnioski}
-Na podstawie powyższych badań, można stwierdzić, że nie ma jednej dobrej, uniwersalnej metody badania podobieństwa. Dla algorytmu UBCF właściwym okazał się współczynnik korelacji \emph{Pearsona}, który dla IBCF dawał najgorsze wyniki. Należy zatem dla każdego algorytmu wybrać właściwą dla niego miarę podobieństwa.
 
-
-\subsection{Który z algorytmów ma lepszą skalowalność?}
-
+\input{creationTimeTable.tex}
+Jak widać... TODO
+\input{predictionTimeTable.tex}
 \subsubsection{Wnioski}
 
 \subsection{Jaki wpływ na wyniki algorytmu ma liczba podobnych użytkowników, używana do predykcji oceny?}

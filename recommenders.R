@@ -19,6 +19,7 @@ predict(rUbcf,type="ratings", getData(e1,"known")[1:10])
 
 #rIbcf =  Recommender(getData(e1,"train"), method = "IBCF",param=list(normalize="center", method="cosine", minRating=3))
 
-t1 = system.time(rIbcf <-  Recommender(getData(e1,"train"), method = "IBCF"))
-
+#t1 = system.time(rIbcf <-  Recommender(getData(e1,"train"), method = "IBCF"))
+t1 = system.time(rIbcf <-  Recommender(allData[1:500, 1:400], method = "IBCF"))
+p1 = predict(rIbcf,type="ratings", allData[501:510, 1:40])
 p1 = predict(rIbcf,type="ratings", getData(e1,"known"))

@@ -1,6 +1,6 @@
 source('functions.R')
 library('recommenderlab')
-library('ROCR')
+library('ggplot2')
 library('xtable')
 library('ggplot2')
 data(MovieLense)        #load MovieLense 100k data into workspace from recommender package (optional - we have our data)
@@ -20,7 +20,8 @@ allData = MovieLense
 #recoms = predict(recommender,type="ratings", testData[1:10])  #predict all movie ratings for first 10 test users
 #recomsMatrix = as(recoms,"matrix")[,1:10] #clip rating matrix to first 10 movies
 
-scheme = evaluationScheme(allData, method="split",train=0.8, goodRating = 4)
+
+scheme = evaluationScheme(allData, method="split",train=0.8, goodRating = 0)
 algorithms <- list(
    "popular items" = list(name="POPULAR", param=NULL),
    "user-based CF Cosine center nn50" = list(name="UBCF", param=list(method="Cosine", normalize='center', nn=20)),
@@ -43,10 +44,10 @@ algorithms <- list(
 #	Metody podobieństwa
 #
 similarityMethods.benchmark <- function(scheme) {	
-	# Porównanie tylko UBCF między sobą, 
+  #UBCF - miary podobienstwa
 	ubcfParamsCosine = list(method="Cosine", normalize='center', nn=25)
-	ubcfParamsPearson = list(method="pearson", normalize='center', nn=25)
-	ubcfParamsJaccard = list(method="jaccard", normalize='center', nn=25)
+	ubcfParamsPearson = list(method="pearson", normalize='center', nn=25, minRating=4)
+	ubcfParamsJaccard = list(method="jaccard", normalize='center', nn=25, minRating=4)
 
 	ibcfParamsCosine = list(method="Cosine", normalize='center', k=30, alpha=0.5)
 	ibcfParamsPearson = list(method="pearson", normalize='center', k=30, alpha=0.5)
@@ -72,6 +73,7 @@ similarityMethods.benchmark <- function(scheme) {
 	)
 	rownames(ubcfErrors) <- c("UBCF cosine","UBCF Pearson", "UBCF Jaccard")
 
+  #IBCF - miary podobienstwa
 	ibcf.cosine <- Recommender(trainingData, method="IBCF", parameter=ibcfParamsCosine)
 	ibcf.pearson <- Recommender(trainingData, method="IBCF", parameter=ibcfParamsPearson)
 	ibcf.jaccard <- Recommender(trainingData, method="IBCF", parameter=ibcfParamsJaccard)
@@ -98,6 +100,54 @@ similarityMethods.benchmark.saveData <- function(resultsMatrix, fileName, captio
 	close(ibcfSMTableFile)
 }
 
+#
+# Test nr 6 - skalowalność 
+#
+  
+  allData = MovieLense
+  ubcfParamsCosine = list(method="Cosine", normalize='center', nn=25)
+  ibcfParamsCosine = list(method="Cosine", normalize='center', k=30, alpha=0.5)
+  
+  breaks = 5
+  portion = as.integer(943/breaks)
+  ibcfResults = c()
+  ubcfResults = c()
+  domain = c()
+  
+    for(i in 1:breaks){
+      print(paste("calculating ", i))
+      domain = c(i*portion,domain)
+      schemeTmp = evaluationScheme(allData[1:(i*portion)], method="split",train=0.8, goodRating = 4)
+      #build recommenders
+      ubcfCreationTime = system.time(ubcfTmp <- 
+                                       Recommender(getData(schemeTmp,"train"), method="UBCF", parameter=ubcfParamsCosine))
+      ibcfCreationTime = system.time(ibcfTmp <- 
+                                       Recommender(getData(schemeTmp,"train"), method="IBCF", parameter=ibcfParamsCosine))
+      #performing predictions
+      ubcfPredTime = system.time(ubcfPredTmp <- predict(ubcfTmp, getData(schemeTmp,"known"), type="ratings"))
+      ibcfPredTime = system.time(ibcfPredTmp <- predict(ibcfTmp, getData(schemeTmp,"known"), type="ratings"))
+      #calculating errors
+      ibcfResultsTmp = calcPredictionError(ibcfPredTmp, getData(schemeTmp,"unknown"))
+      ubcfResultsTmp = calcPredictionError(ubcfPredTmp, getData(schemeTmp,"unknown"))
+      #add error results to results matrix
+      ubcfResults <- rbind(ubcfResults, c(i*portion, ubcfCreationTime[3], ubcfPredTime[3], ubcfResultsTmp))
+      ibcfResults <- rbind(ibcfResults, c(i*portion, ibcfCreationTime[3], ibcfPredTime[3], ibcfResultsTmp))
+    }
+  colnames(ubcfResults) <- c("rozmiar", "czas budowy", "czas predykcji",  "MAE", "MSE", "RMSE")
+  colnames(ibcfResults) <- c("rozmiar", "czas budowy", "czas predykcji", "MAE", "MSE", "RMSE")
+  
+  buildingTimesUbcf = ubcfResults[,2]
+  buildingTimesIbcf = ibcfResults[,2]
+  
+  predictingTimesUbcf = ubcfResults[,3]
+  predictingTimesIbcf = ibcfResults[,3]
+  
+  #drawing plots (currently unused)
+  frame1 = data.frame(domain,buildingTimesUbcf,buildingTimesIbcf)
+  meltData <- melt(data = frame1, id.vars = "domain")
+  ggplot(data = meltData, aes(x = domain, y = value, colour = variable)) + geom_line()
+  ggsave(file.path("doc", "img", "ibcf-K-czas.pdf"))
+}
 
 #
 #	Przeprowadza test parametru nn algorytmu UBCF i zwraca wyniki pozwalające na rysowanie wykresów
@@ -233,4 +283,3 @@ ubcf.nn.benchmark.saveGraphs <- function(ubcf.nn.benchmark.results, prefix = "")
 	plot(ubcf.nn.benchmark.results$evaluationResults, "prec/rec", annotate=TRUE)
 	dev.off()
 }
-
