@@ -212,18 +212,31 @@ Dostępne miary podobieństwa to:
 Różnice w poszczególnych parametrach algorytmów UBCF i IBCF były tylko na poziomie metody obliczania podobieństwa. W ten sposób mogliśmy stwierdzić jak metoda podobieństwa ma wpływ na wyniki algorytmu przy reszcie paramertów takich samych. 
 
 \subsubsection{UBCF}
-TODO co jest najlepsze a co najgorsze
+Wspólne parametry dla algorytmu UBCF:
+\begin{itemize}
+\item metoda normalizacji: \emph{center}
+\item $nn = 25$
+\end{itemize}
 
-W przypadku UBCF najlepszą miarą podobieństwa okazała się metoda TODO. Najgorzej poradził sobie TODO.
+W przypadku UBCF najlepszą miarą podobieństwa okazał się współczynnik korelacji \emph{Pearson}. Najgorsze wyniki uzyskano dla metody \emph{Jaccard}.
 
 \input{ubcfSimilarityTableErrors.tex}
 
 \subsubsection{IBCF}
-W przypadku IBCF najlepszą miarą podobieństwa okazała się metoda TODO. Najgorzej poradził sobie TODO.
+Wspólne parametry dla algorytmu IBCF:
+\begin{itemize}
+\item metoda normalizacji: \emph{center}
+\item zapamiętana liczba najbardziej podobnych filmów: $k = 30$
+% \item $alpha=0.5$ % ta alpha to parametr dla metody liczenia podobieńsa "Karypis" ale my jej nie badamy, bo nie działało 
+\end{itemize}
+
+W przypadku IBCF najlepszą miarą podobieństwa okazała się metoda cosinus. W przeciwieństwie do UBCF najgorzej poradził sobie współczynnik korelacji \emph{Pearsona}.
 
 \input{ibcfSimilarityTableErrors.tex}
 
 \subsubsection{Wnioski}
+Na podstawie powyższych badań, można stwierdzić, że nie ma jednej dobrej, uniwersalnej metody badania podobieństwa. Dla algorytmu UBCF właściwym okazał się współczynnik korelacji \emph{Pearsona}, który dla IBCF dawał najgorsze wyniki. Należy zatem dla każdego algorytmu wybrać właściwą dla niego miarę podobieństwa.
+
 
 \subsection{Który z algorytmów ma lepszą skalowalność?}
 
