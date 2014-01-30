@@ -73,7 +73,6 @@ Chcemy znaleźć odpowiedzi na następujące pytania:
 \item Który z algorytmów ma lepszą skalowalność?
 \item Jaki wpływ na wyniki algorytmu ma liczba podobnych użytkowników, używana do predykcji oceny?
 \item Jaki wpływ na wyniki algorytmu ma liczba podobnych filmów, używana do predykcji oceny?
-\item Czy uzyskane oceny są faktycznie użyteczne? W celu odpowiedzi na to pytanie, wprowadzę siebie do danych i spróbuje uzyskać rekomendacje, których użyteczność mogę ocenić.
 \item Który algorytm radzi sobie lepiej dla małej ilości danych?
 \item Jak zwiększanie ilości danych wpływa na dokładność algorytmu?
 \end{enumerate}
@@ -96,7 +95,6 @@ Będziemy badać następujące parametry:
 \begin{itemize}
 \item k w kNN \footnote{ang. k-nearest neighbors} - czyli jak ilość podobnych użytkowników / filmów służy predykcji oceny filmu,
 \item sposób wyznaczania podobieństwa: cosinus, pearson i inne dostępne miary z pakietu,
-\item sposób normalizacji,
 \item ilość dostępnych danych.
 \end{itemize}
 
@@ -397,10 +395,6 @@ Poniższe wykresy przedstawiają wartości błędów predykcji dla zadanego para
 Analizując wykresy błędów, można dojść do podobnych wniosków jak przy wysokich wartościach parametru $nn$ w algorytmie UBCF - dla dużych wartości $k$ i stosunkowo niedużego zbioru danych zaczynamy brać pod uwagę mało podobne filmy do budowy modelu co przekłada się na gorsze predykcje i większe błędy na zbiorze testowym.
 
 TODO wnioski o ROC, precision/RECALL
-
-\subsection{Czy uzyskane oceny są faktycznie użyteczne?}
-
-\subsubsection{Wnioski}
 
 \subsection{Który algorytm radzi sobie lepiej dla małej ilości danych?}
 
