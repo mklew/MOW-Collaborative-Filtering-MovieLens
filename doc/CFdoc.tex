@@ -67,9 +67,9 @@ Chcemy znaleźć odpowiedzi na następujące pytania:
 \begin{enumerate}
 \item Jak wyglądają dane z którymi pracujemy? Jak rozkładają się oceny filmów? Jakie mają podstawowe wartości statystyczne?
 \item Jak wyglądają dane przed i po ich normalizacji?
+\item Jak sposób mierzenia podobieństwa wpływa na wyniki algorytmu?
 \item Który algorytm generuje lepsze wyniki?
 \item Który algorytm szybciej generuje wyniki?
-\item Jak sposób mierzenia podobieństwa wpływa na wyniki algorytmu?
 \item Który z algorytmów ma lepszą skalowalność?
 \item Jaki wpływ na wyniki algorytmu ma liczba podobnych użytkowników, używana do predykcji oceny?
 \item Jaki wpływ na wyniki algorytmu ma liczba podobnych filmów, używana do predykcji oceny?
@@ -189,14 +189,7 @@ Wykres \ref{fig:histogram-ocen-norm} przedstawia wyniki znormalizowane. Wyniki n
 \end{figure}
 
 \subsubsection{Wnioski}
-
-\subsection{Który algorytm generuje lepsze wyniki?}
-
-\subsubsection{Wnioski}
-
-\subsection{Który algorytm szybciej generuje wyniki?}
-
-\subsubsection{Wnioski}
+TODO
 
 \subsection{Jak sposób mierzenia podobieństwa wpływa na wyniki algorytmu?}
 Sprawdziliśmy w jaki sposób miara podobieństwa użytkowników dla UBCF filmów dla IBCF wpływa na wyniki algorytmu.
@@ -235,13 +228,26 @@ W przypadku IBCF najlepszą miarą podobieństwa okazała się metoda cosinus. W
 \subsubsection{Wnioski}
 Na podstawie powyższych badań, można stwierdzić, że nie ma jednej dobrej, uniwersalnej metody badania podobieństwa. Dla algorytmu UBCF właściwym okazał się współczynnik korelacji \emph{Pearsona}, który dla IBCF dawał najgorsze wyniki. Należy zatem dla każdego algorytmu wybrać właściwą dla niego miarę podobieństwa.
 
+\subsection{Który algorytm generuje lepsze wyniki?}
+Jeśli spojrzymy jeszcze raz na miary błędów i weźmiemy pod uwagę tylko te najlepsze dla danego algorytmu to  algorytmy IBCF i UBCF dają podobne miary błędów.
+
+\input{ubcfSimilarityTableErrors.tex}
+
+\input{ibcfSimilarityTableErrors.tex}
+
+\subsubsection{Wnioski}
+Bez optymalizacji wszystkich parametrów dla konkretnego algorytmu i konkretnego zbioru danych ciężko jest jednoznacznie stwierdzić, który algorytm jest lepszy, a który gorszy. Można jednak powiedzieć, że dla standardowych parametrów algorytmy dają dość porównywalne wyniki, a to który jest lepszy, a który gorszy można oceniać raczej od potrzeby na algorytm który szybko buduje model versus algorytm, który szybko dokonuje predykcji.
+
 \subsection{Który z algorytmów ma lepszą skalowalność?}
-
-
+\label{skalowalnosc-pytanie}
 \input{creationTimeTable.tex}
 Jak widać... TODO
 \input{predictionTimeTable.tex}
 \subsubsection{Wnioski}
+TODO
+
+\subsection{Który algorytm szybciej generuje wyniki?}
+Na to pytanie odpowiedź znajduje się razem z badaniem skalowalności algorytmów \ref{skalowalnosc-pytanie}.
 
 \subsection{Jaki wpływ na wyniki algorytmu ma liczba podobnych użytkowników, używana do predykcji oceny?}
 W tym badaniu interesuje nas parametr $nn$ algorytmu UBCF. 
