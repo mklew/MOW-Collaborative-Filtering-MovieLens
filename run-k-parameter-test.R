@@ -1,5 +1,5 @@
 # run-k-parameter-test.R
-
+library('ggplot2')
 source('recommender.R')
 
 ibcfKBenchmarkResults <- ibcf.k.benchmark(scheme)

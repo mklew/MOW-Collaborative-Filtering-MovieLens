@@ -3,6 +3,7 @@ source('functions.R')
 library('recommenderlab')
 library('ROCR')
 library('xtable')
+library('ggplot2')
 
 #read all data from file and convert it into recommenderlab structure
 allData = MovieLense 
@@ -109,13 +110,13 @@ similarityMethods.benchmark.saveData <- function(resultsMatrix, fileName, captio
 #	zwraca liste
 #		$errorsAndTime to jest macierz z kolumnami [nn, czas, MAE, MSE, RMSE]
 #		$evaluationResults to wyniki evaluate dla różnych wartości nn przy reszcie parametrów takich samych
-ubcf.nn.benchmark <- function(scheme) {
+ubcf.nn.benchmark <- function(scheme, startNN, step, maxNN) {
 	ubcfCommonParameters = list(method="Cosine", normalize='center', minRating=4)
 	trainingData <- getData(scheme, "train")
 	knownData <- getData(scheme, "known")	
 	unknownData <- getData(scheme, "unknown")	
 	# od nn=5 ze skokiem 20, aż do całkowitej liczby użytkowników
-	nns <- seq(5, dim(trainingData)[1], 20)
+	nns <- seq(startNN, maxNN, step)
 	algorithms <- list()
 	errorsAndTime <- c()
 	for(nn in nns) {
@@ -201,35 +202,35 @@ ibcf.k.benchmark.saveGraphs <- function(ibcf.k.benchmark.results) {
 	ggsave(file.path("doc", "img", "ibcf-K-czas-predykcji.pdf"))
 
 	pdf(file.path("doc", "img", "ibcf-K-ROC.pdf"))
-	plot(results$evaluationResults)
+	plot(ibcf.k.benchmark.results$evaluationResults)
 	dev.off()
 
 	pdf(file.path("doc", "img", "ibcf-K-PREC-REC.pdf"))
-	plot(results$evaluationResults, "prec/rec", annotate=TRUE)
+	plot(ibcf.k.benchmark.results$evaluationResults, "prec/rec", annotate=TRUE)
 	dev.off()
 }
 
 
-ubcf.nn.benchmark.saveGraphs <- function(ubcf.nn.benchmark.results) {
+ubcf.nn.benchmark.saveGraphs <- function(ubcf.nn.benchmark.results, prefix = "") {
 	errorsAndTimeDF <- data.frame(ubcf.nn.benchmark.results$errorsAndTime)
 	q <- qplot(nn, MAE, data=errorsAndTimeDF, geom="line", xlab="parametr nn", main="MAE(nn)")	
-	ggsave(file.path("doc", "img", "ubcf-NN-MAE.pdf"))
+	ggsave(file.path("doc", "img", paste(prefix,"ubcf-NN-MAE.pdf") ))
 	q <- qplot(nn, MSE, data=errorsAndTimeDF, geom="line", xlab="parametr nn", main="MSE(nn)")	
-	ggsave(file.path("doc", "img", "ubcf-NN-MSE.pdf"))
+	ggsave(file.path("doc", "img", paste(prefix, "ubcf-NN-MSE.pdf") ))
 	q <- qplot(nn, RMSE, data=errorsAndTimeDF, geom="line", xlab="parametr nn", main="RMSE(nn)")	
-	ggsave(file.path("doc", "img", "ubcf-NN-RMSE.pdf"))
+	ggsave(file.path("doc", "img", paste(prefix, "ubcf-NN-RMSE.pdf")  ))
 	q <- qplot(nn, czas_budowy, data=errorsAndTimeDF, geom="line", xlab="parametr nn", main="czas budowy(nn)")	
-	ggsave(file.path("doc", "img", "ubcf-NN-czas-budowy.pdf"))
+	ggsave(file.path("doc", "img", paste(prefix, "ubcf-NN-czas-budowy.pdf") ))
 
 	q <- qplot(nn, czas_predykcji, data=errorsAndTimeDF, geom="line", xlab="parametr nn", main="czas predykcji(nn)")	
-	ggsave(file.path("doc", "img", "ubcf-NN-czas-predykcji.pdf"))
+	ggsave(file.path("doc", "img", paste(prefix, "ubcf-NN-czas-predykcji.pdf") ))
 
-	pdf(file.path("doc", "img", "ubcf-NN-ROC.pdf"))
-	plot(results$evaluationResults)
+	pdf(file.path("doc", "img", paste(prefix, "ubcf-NN-ROC.pdf") ))
+	plot(ubcf.nn.benchmark.results$evaluationResults)
 	dev.off()
 
-	pdf(file.path("doc", "img", "ubcf-NN-PREC-REC.pdf"))
-	plot(results$evaluationResults, "prec/rec", annotate=TRUE)
+	pdf(file.path("doc", "img", paste(prefix, "ubcf-NN-PREC-REC.pdf") ))
+	plot(ubcf.nn.benchmark.results$evaluationResults, "prec/rec", annotate=TRUE)
 	dev.off()
 }
 

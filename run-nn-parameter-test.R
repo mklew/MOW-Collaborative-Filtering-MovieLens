@@ -1,6 +1,7 @@
 #run-nn-parameter-test.R
-
+library('ggplot2')
 source('recommender.R')
 
-ubcfNNBenchmarkResults <- ubcf.nn.benchmark(scheme)
-ubcf.nn.benchmark.saveGraphs(ubcfNNBenchmarkResults)
+trainingData <- getData(scheme, "train")
+ubcfNNBenchmarkResults <- ubcf.nn.benchmark(scheme, startNN = 30, step = 50, maxNN= dim(trainingData)[1])
+ubcf.nn.benchmark.saveGraphs(ubcfNNBenchmarkResults, "30-max-50")
