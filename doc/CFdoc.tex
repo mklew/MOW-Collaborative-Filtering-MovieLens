@@ -237,18 +237,162 @@ W przypadku IBCF najlepszą miarą podobieństwa okazała się metoda cosinus. W
 \subsubsection{Wnioski}
 Na podstawie powyższych badań, można stwierdzić, że nie ma jednej dobrej, uniwersalnej metody badania podobieństwa. Dla algorytmu UBCF właściwym okazał się współczynnik korelacji \emph{Pearsona}, który dla IBCF dawał najgorsze wyniki. Należy zatem dla każdego algorytmu wybrać właściwą dla niego miarę podobieństwa.
 
-
 \subsection{Który z algorytmów ma lepszą skalowalność?}
 
 \subsubsection{Wnioski}
 
 \subsection{Jaki wpływ na wyniki algorytmu ma liczba podobnych użytkowników, używana do predykcji oceny?}
+W tym badaniu interesuje nas parametr $nn$ algorytmu UBCF. 
+
+Parametry algorytmu UBCF podczas badania:
+\begin{itemize}
+\item metoda normalizacji: \emph{center}
+\item miara podobieństwa: \emph{Pearson}
+\end{itemize}
+
+Podczas badania zmieniamy wartość parametru $nn$ zaczynając od $nn=30$ aż do $nn=200$ z krokiem $30$. Na początku badaliśmy zmiany $nn$, aż do maksymalnego poziomu - czyli liczby danych, ale dla wysokich wartości parametru $nn$ nie udało się uzyskać wyników, ponieważ błędy były zbyt małymi liczbami. Pakiet \emph{recommenderlab} nie był wstanie wykreślić krzywej ROC, ani \emph{Precision/Recall}.
+
+Poniżej zamieszone zostały wykresy z przeprowadzonych badań. Następnie wyciągnięto z nich wnioski.
+
+\subsubsection{Wartości błędów MAE, MSE, RMSE}
+Poniższe wykresy przedstawiają wartości błędów predykcji dla zadanego parametru.
+
+\begin{figure}[H]
+  \begin{center}
+  \fbox{
+    \includegraphics[width=\textwidth, scale=0.5]{img/30-max-50-no-minRating-ubcf-NN-MAE.pdf}
+  }
+  \end{center}
+  \caption{Miara błędu MAE od parametru nn}
+  \label{fig:ubcf-nn-mae}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \fbox{
+    \includegraphics[width=\textwidth, scale=0.5]{img/30-max-50-no-minRating-ubcf-NN-MSE.pdf}
+  }
+  \end{center}
+  \caption{Miara błędu MSE od parametru nn}
+  \label{fig:ubcf-nn-mse}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \fbox{
+    \includegraphics[width=\textwidth, scale=0.5]{img/30-max-50-no-minRating-ubcf-NN-RMSE.pdf}
+  }
+  \end{center}
+  \caption{Miara błędu RMSE od parametru nn}
+  \label{fig:ubcf-nn-rmse}
+\end{figure}
+
+\subsubsection{Wykres krzywej ROC}
+
+\begin{figure}[H]
+  \begin{center}
+  \fbox{
+    \includegraphics[width=\textwidth, scale=0.5]{img/30-max-50-no-minRating-ubcf-NN-ROC.pdf}
+  }
+  \end{center}
+  \caption{Krzywa ROC w zależności od nn}
+  \label{fig:ubcf-nn-rmse}
+\end{figure}
+
+\subsubsection{Wykres Precision/Recall}
+
+\begin{figure}[H]
+  \begin{center}
+  \fbox{
+    \includegraphics[width=\textwidth, scale=0.5]{img/30-max-50-no-minRating-ubcf-NN-PREC-REC.pdf}
+  }
+  \end{center}
+  \caption{Precision/Recall w zależności od nn}
+  \label{fig:ubcf-nn-rmse}
+\end{figure}
+
 
 \subsubsection{Wnioski}
+Z wykresów wartości błędów można wywnioskować, że najlepsza wartość parametru znajduje się w okolicy $nn=120$. Dalsze zwiększanie parametru NN - prowadzi do zwiększania się błędów. Można to tłumaczyć tym, że jest to za duża wartość w stosunku do naprawdę innych bliskich osób o podobnych preferencjach. Ze zbyt wysoką wartością $nn$ zaczynamy uwzględniać osoby, które mają odmienne preferencje co prowadzi do gorszych predykcji, a zatem ogólny błąd jest większy.
+
+TODO wnioski na podstawie tego precision recall i ROC
 
 \subsection{Jaki wpływ na wyniki algorytmu ma liczba podobnych filmów, używana do predykcji oceny?}
+W tym badaniu interesuje nas parametr $k$ algorytmu IBCF. 
+
+Parametry algorytmu IBCF podczas badania:
+\begin{itemize}
+\item metoda normalizacji: \emph{center}
+\item miara podobieństwa: \emph{Cosinus}
+\end{itemize}
+
+Podczas badania zmieniamy parametr k od $k=5$ do $k=150$ ze skokiem $20$. Dla każdego k budujemy model, mierzymy błędy na zbiorze testowym i czasy potrzebne na predykcję i zbudowanie modelu. Następnie porównujemy ze sobą algorytmy z różnymi parametrami $k$.
+
+Wyniki badań przedstawiono na wykresach poniżej. 
+
+\subsubsection{Wartości błędów MAE, MSE, RMSE}
+Poniższe wykresy przedstawiają wartości błędów predykcji dla zadanego parametru $k$.
+
+\begin{figure}[H]
+  \begin{center}
+  \fbox{
+    \includegraphics[width=\textwidth, scale=0.5]{img/ibcf-K-MAE.pdf}
+  }
+  \end{center}
+  \caption{Miara błędu MAE od parametru k}
+  \label{fig:ibcf-k-mae}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \fbox{
+    \includegraphics[width=\textwidth, scale=0.5]{img/ibcf-K-MSE.pdf}
+  }
+  \end{center}
+  \caption{Miara błędu MSE od parametru k}
+  \label{fig:ibcf-k-mse}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \fbox{
+    \includegraphics[width=\textwidth, scale=0.5]{img/ibcf-K-RMSE.pdf}
+  }
+  \end{center}
+  \caption{Miara błędu RMSE od parametru k}
+  \label{fig:ibcf-k-rmse}
+\end{figure}
+
+\subsubsection{Wykres krzywej ROC}
+
+\begin{figure}[H]
+  \begin{center}
+  \fbox{
+    \includegraphics[width=\textwidth, scale=0.5]{img/ibcf-K-ROC.pdf}
+  }
+  \end{center}
+  \caption{Krzywa ROC w zależności od k}
+  \label{fig:ibcf-k-roc}
+\end{figure}
+
+\subsubsection{Wykres Precision/Recall}
+
+\begin{figure}[H]
+  \begin{center}
+  \fbox{
+    \includegraphics[width=\textwidth, scale=0.5]{img/ibcf-K-PREC-REC.pdf}
+  }
+  \end{center}
+  \caption{Precision/Recall w zależności od k}
+  \label{fig:ubcf-nn-rmse}
+\end{figure}
+
+
 
 \subsubsection{Wnioski}
+Analizując wykresy błędów, można dojść do podobnych wniosków jak przy wysokich wartościach parametru $nn$ w algorytmie UBCF - dla dużych wartości $k$ i stosunkowo niedużego zbioru danych zaczynamy brać pod uwagę mało podobne filmy do budowy modelu co przekłada się na gorsze predykcje i większe błędy na zbiorze testowym.
+
+TODO wnioski o ROC, precision/RECALL
 
 \subsection{Czy uzyskane oceny są faktycznie użyteczne?}
 

@@ -111,7 +111,7 @@ similarityMethods.benchmark.saveData <- function(resultsMatrix, fileName, captio
 #		$errorsAndTime to jest macierz z kolumnami [nn, czas, MAE, MSE, RMSE]
 #		$evaluationResults to wyniki evaluate dla różnych wartości nn przy reszcie parametrów takich samych
 ubcf.nn.benchmark <- function(scheme, startNN, step, maxNN) {
-	ubcfCommonParameters = list(method="Cosine", normalize='center')
+	ubcfCommonParameters = list(method="pearson", normalize='center')
 	trainingData <- getData(scheme, "train")
 	knownData <- getData(scheme, "known")	
 	unknownData <- getData(scheme, "unknown")	
@@ -214,22 +214,22 @@ ibcf.k.benchmark.saveGraphs <- function(ibcf.k.benchmark.results) {
 ubcf.nn.benchmark.saveGraphs <- function(ubcf.nn.benchmark.results, prefix = "") {
 	errorsAndTimeDF <- data.frame(ubcf.nn.benchmark.results$errorsAndTime)
 	q <- qplot(nn, MAE, data=errorsAndTimeDF, geom="line", xlab="parametr nn", main="MAE(nn)")	
-	ggsave(file.path("doc", "img", paste(prefix,"ubcf-NN-MAE.pdf") ))
+	ggsave(file.path("doc", "img", paste(prefix,"ubcf-NN-MAE.pdf", sep='-') ))
 	q <- qplot(nn, MSE, data=errorsAndTimeDF, geom="line", xlab="parametr nn", main="MSE(nn)")	
-	ggsave(file.path("doc", "img", paste(prefix, "ubcf-NN-MSE.pdf") ))
+	ggsave(file.path("doc", "img", paste(prefix, "ubcf-NN-MSE.pdf", sep='-') ))
 	q <- qplot(nn, RMSE, data=errorsAndTimeDF, geom="line", xlab="parametr nn", main="RMSE(nn)")	
-	ggsave(file.path("doc", "img", paste(prefix, "ubcf-NN-RMSE.pdf")  ))
+	ggsave(file.path("doc", "img", paste(prefix, "ubcf-NN-RMSE.pdf", sep='-')  ))
 	q <- qplot(nn, czas_budowy, data=errorsAndTimeDF, geom="line", xlab="parametr nn", main="czas budowy(nn)")	
-	ggsave(file.path("doc", "img", paste(prefix, "ubcf-NN-czas-budowy.pdf") ))
+	ggsave(file.path("doc", "img", paste(prefix, "ubcf-NN-czas-budowy.pdf", sep='-') ))
 
 	q <- qplot(nn, czas_predykcji, data=errorsAndTimeDF, geom="line", xlab="parametr nn", main="czas predykcji(nn)")	
-	ggsave(file.path("doc", "img", paste(prefix, "ubcf-NN-czas-predykcji.pdf") ))
+	ggsave(file.path("doc", "img", paste(prefix, "ubcf-NN-czas-predykcji.pdf", sep='-') ))
 
-	pdf(file.path("doc", "img", paste(prefix, "ubcf-NN-ROC.pdf") ))
+	pdf(file.path("doc", "img", paste(prefix, "ubcf-NN-ROC.pdf", sep='-') ))
 	plot(ubcf.nn.benchmark.results$evaluationResults)
 	dev.off()
 
-	pdf(file.path("doc", "img", paste(prefix, "ubcf-NN-PREC-REC.pdf") ))
+	pdf(file.path("doc", "img", paste(prefix, "ubcf-NN-PREC-REC.pdf", sep='-') ))
 	plot(ubcf.nn.benchmark.results$evaluationResults, "prec/rec", annotate=TRUE)
 	dev.off()
 }
