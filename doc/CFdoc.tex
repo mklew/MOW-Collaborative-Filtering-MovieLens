@@ -1,4 +1,3 @@
-
 \documentclass[12pt, a4paper]{article}
 \usepackage{polski}
 \usepackage[utf8]{inputenc}
@@ -66,15 +65,12 @@ Chcemy znaleźć odpowiedzi na następujące pytania:
 
 \begin{enumerate}
 \item Jak wyglądają dane z którymi pracujemy? Jak rozkładają się oceny filmów? Jakie mają podstawowe wartości statystyczne?
-\item Jak wyglądają dane przed i po ich normalizacji?
 \item Jak sposób mierzenia podobieństwa wpływa na wyniki algorytmu?
 \item Który algorytm generuje lepsze wyniki?
-\item Który algorytm szybciej generuje wyniki?
 \item Który z algorytmów ma lepszą skalowalność?
 \item Jaki wpływ na wyniki algorytmu ma liczba podobnych użytkowników, używana do predykcji oceny?
 \item Jaki wpływ na wyniki algorytmu ma liczba podobnych filmów, używana do predykcji oceny?
 \item Który algorytm radzi sobie lepiej dla małej ilości danych?
-\item Jak zwiększanie ilości danych wpływa na dokładność algorytmu?
 \end{enumerate}
 
 \subsection{Dane}
@@ -177,13 +173,6 @@ Wykres \ref{fig:histogram-ocen-nieznorm} przedstawia rozkład ocen nieznormalizo
   \label{fig:histogram-ocen-nieznorm}
 \end{figure}
 
-Poniższa tabelka zawiera statystyki zbioru danych, z którym pracujemy. Statystyki pozwalają zorientować się z tym jak wygląda zbiór danych.
-\input{statystyki-zbioru.tex}
-
-\subsubsection{Wnioski}
-Patrząc na wykres powyżej, medianę oraz średnią ocene można wywnioskować, że zazwyczaj oceny, które się pojawiają są ocenami pozytywnymi. Oznacza to tyle, że ocenia się częściej to co się lubi i tych ocen jest najwięcej. Dane mogą być jednak zaburzone przez ludzi, którzy oceniają filmy w sposób dla ich tendencyjny np. nie stosując ocen pośrednich dając jedynie oceny najniższe i najwyższe.
-
-\subsection{Jak wyglądają dane przed i po ich normalizacji?}
 Wykres \ref{fig:histogram-ocen-norm} przedstawia wyniki znormalizowane. Wyniki nieznormalizowane przedstawione zostały na wykresie \ref{fig:histogram-ocen-nieznorm}. Po normalizacji oceny wyglądają podobnie do rozkładu normalnego.
 \begin{figure}[H]
   \begin{center}
@@ -195,8 +184,12 @@ Wykres \ref{fig:histogram-ocen-norm} przedstawia wyniki znormalizowane. Wyniki n
   \label{fig:histogram-ocen-norm}
 \end{figure}
 
+Poniższa tabelka zawiera statystyki zbioru danych, z którym pracujemy. Statystyki pozwalają zorientować się z tym jak wygląda zbiór danych.
+\input{statystyki-zbioru.tex}
+
 \subsubsection{Wnioski}
-TODO
+Patrząc na wykres powyżej, medianę oraz średnią ocene można wywnioskować, że zazwyczaj oceny, które się pojawiają są ocenami pozytywnymi. Oznacza to tyle, że ocenia się częściej to co się lubi i tych ocen jest najwięcej. Dane mogą być jednak zaburzone przez ludzi, którzy oceniają filmy w sposób dla ich tendencyjny np. nie stosując ocen pośrednich dając jedynie oceny najniższe i najwyższe.
+
 
 \subsection{Jak sposób mierzenia podobieństwa wpływa na wyniki algorytmu?}
 Sprawdziliśmy w jaki sposób miara podobieństwa użytkowników dla UBCF filmów dla IBCF wpływa na wyniki algorytmu.
@@ -247,14 +240,20 @@ Bez optymalizacji wszystkich parametrów dla konkretnego algorytmu i konkretnego
 
 \subsection{Który z algorytmów ma lepszą skalowalność?}
 \label{skalowalnosc-pytanie}
+Zostały przeprowadzone testy wydajnościowe algorytmów UBCF i IBCF, dla 5 różnych wielkości danych. Testowany był zarówno czas budowy modelu i jak i czas predykcji wszystkich przykładów testowych.
 \input{creationTimeTable.tex}
-Jak widać... TODO
+
 \input{predictionTimeTable.tex}
 \subsubsection{Wnioski}
-TODO
+Jak widać w wynikach przeprowadzonych testów, czasy budowy i predykcji dla obydwu algorytmów znacznie różnią się między sobą. 
+Przyczyną tego jest różne podejście do zadania, a więc budowa rekomenderów i sposób ich działania.
+Algorytm UBCF jest algorytmem opartym na pamięci, a więc czas stworzenia modelu jest pomijalnie mały i wynosi zaledwie 0.02 - 0.03 s. dla różnych rozmiarów danych. 
+W przypadku algorytmu IBCF budowanie modelu jest operacją czasochłonną i wymaga obliczenia podobieństwa każdego obiektu do każdego.\
 
-\subsection{Który algorytm szybciej generuje wyniki?}
-Na to pytanie odpowiedź znajduje się razem z badaniem skalowalności algorytmów \ref{skalowalnosc-pytanie}.
+Czas generowania wyników algorytmu IBCF jest zdecydowanie krótszy niż dla UBCF. Jest tak dlatego, że IBCF korzysta z wcześniej wyznaczonej tablicy podobieństw obiektów, dzięki czemu nie musi na bieżąco analizować całego zbioru danych, jak to jest w przypadku algorytmu UBCF. W metodzie UBCF podczas predykcji obliczane są podobieństwa użytkownika aktywnego do innych użytkowników, co działa niekorzystnie na jego szybkość.
+\
+
+W przypadku raczej statycznych, rzadko zmieniających się danych lepszym wyborem może okazać się podejście IBCF, które dużo szybciej generuje wyniki.
 
 \subsection{Jaki wpływ na wyniki algorytmu ma liczba podobnych użytkowników, używana do predykcji oceny?}
 W tym badaniu interesuje nas parametr $nn$ algorytmu UBCF. 
@@ -411,26 +410,42 @@ Analizując wykresy błędów, można dojść do podobnych wniosków jak przy wy
 
 \subsection{Który algorytm radzi sobie lepiej dla małej ilości danych?}
 
-\subsubsection{Wnioski}
+W tym teście manipulowaliśmy parametrem "given", który oznaczał liczbę losowo wybranych ocen użytkownika spośród wszystkich jego ocen, które brały udział w ewaluacji algorytmu. Dzięki temu można było zmieniać rzadkość ocen użytkowników.
+Poniższe tabele przedstawiają błędy algorytmów UBCF oraz IBCF przy zmiennej wartości parametru given.
+\begin{figure}[H]
+  \begin{center}
+  \fbox{
+    \includegraphics[width=\textwidth, scale=0.5]{img/given-mae.pdf}
+  }
+  \end{center}
+  \caption{Błąd MAE w zależności od parametru given}
+  \label{fig:given-mse}
+\end{figure}
 
-\subsection{Jak zwiększanie ilości danych wpływa na dokładność algorytmu?}
+\begin{figure}[H]
+  \begin{center}
+  \fbox{
+    \includegraphics[width=\textwidth, scale=0.5]{img/given-mse.pdf}
+  }
+  \end{center}
+  \caption{Błąd MSE w zależności od parametru given}
+  \label{fig:given-mse}
+\end{figure}
 
 \subsubsection{Wnioski}
+Wyniki odpowiadają oczekiwaniom zdroworozsądkowym, podpowiadającym że im większa liczba ocen użytkownika jest uwzględniana tym błąd jest mniejszy.
+Obydwa algorytmy zanotowały podobną poprawę błędu przy zwiększaniu parametru. W przypadku błędu MSE i RMSE algorytm UBCF odznaczał się nieznacznie lepszymi wynikami.
+
 
 \section{Podsumowanie}
-Odpowiedzieliśmy na wszystkie postawione pytania badawcze. 
-% TODO co więcej?
 
-\subsection{Wnioski końcowe}
-W ramach tej pracy zapoznaliśmy się szczegółowo z algorytmami IBCF, UBCF i przebadaliśmy parametry, które mają wpływ na ich działanie. Przeanalizowaliśmy także złożoność czasową algorytmów oraz TODO
+W ramach tej pracy zapoznaliśmy się szczegółowo z algorytmami IBCF, UBCF i przebadaliśmy parametry, które mają wpływ na ich działanie. Przeanalizowaliśmy także złożoność czasową algorytmów oraz ich działanie przy różnym rozmiarze danych.
 
 Kolaboratywna filtracja jest ciekawą techniką, zwłaszcza w ujęciu komercyjnych zastosowań. Algorytmy UBCF i IBCF pozwalają na użycie ich w rzeczywistym przypadku. Wiedza na temat różnic pomiędzy algorytmami oraz to jaki wpływ mają różne parametry na ich działanie jest krytyczna. Dzięki przeprowadzonym badaniom, możemy stwierdzić, że taką wiedzę posiadamy.
 
-% TODO coś jeszcze ?? Starałem się to jakoś ładnie napisać
 
 
 \nocite{*}
 \bibliographystyle{plainnat}
 \bibliography{bibliography}
 \end{document}
-
